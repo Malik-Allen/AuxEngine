@@ -21,6 +21,14 @@ namespace  AuxEngine
         m_app(std::make_unique<IApp>())
     {}
 
+    Engine::~Engine()
+    {
+		if (m_isRunning)
+		{
+			Shutdown();
+		}
+    }
+
     void Engine::Update( const float deltaTime )
     {
         m_windowHandler->ProcessEvents();

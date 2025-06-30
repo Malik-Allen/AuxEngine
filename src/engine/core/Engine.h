@@ -24,7 +24,7 @@ namespace  AuxEngine
         Engine( Engine&& ) = delete;
         Engine& operator = ( Engine&& ) = delete;
 
-        ~Engine() override = default;
+        ~Engine() override;
 
     private:
         bool m_isRunning;

@@ -3,8 +3,13 @@
 #ifndef AUX_ENGINE_H
 #define AUX_ENGINE_H
 
-#include "engine/core/Engine.h"
-#include "engine/core/DebugLog.h"
-
+#include "../src/engine/core/App.h"
+#include "../src/engine/core/DebugLog.h"
+#include "../src/engine/core/Engine.h"
+#include "../src/engine/core/EngineClock.h"
+#include "../src/engine/core/InputHandler.h"
+#include "../src/engine/parsers/CsvParser.h"
+#include "../src/engine/parsers/IniParser.h"
+#include "../src/engine/parsers/JsonParser.h"
 
 #endif // AUX_ENGINE_H

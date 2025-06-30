@@ -3,7 +3,7 @@
 #ifndef AUX_INIPARSER_H
 #define AUX_INIPARSER_H
 
-#include "engine/parsers/inih/cpp/INIReader.h"
+#include "inih/cpp/INIReader.h"
 
 #include <fstream>
 #include <iostream>

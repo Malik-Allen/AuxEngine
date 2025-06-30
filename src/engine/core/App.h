@@ -5,7 +5,6 @@
 
 namespace  AuxEngine
 {
-    // TODO: Add logic to manage and run scenes and renderer. 
     // TODO: Add logic to properly handle appliaction Exit and correct handling in Engine for when the application has been exited.
 
     class IApp
