@@ -99,9 +99,9 @@ namespace  AuxEngine
 			output.append( BuildTimeStamp() );
 			output.append( "[" );
 			output.append( ToString( logType ) );
-			output.append( "]\t" );
+			output.append( "]" );
 			output.append( BuildFunctionSignature(fileName, line ) );
-			output.append( ":\t" );
+			output.append( ": " );
 			output.append( message );
 			output.append( "\n" );
 
