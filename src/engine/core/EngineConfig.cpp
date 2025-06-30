@@ -17,7 +17,7 @@ namespace  AuxEngine
 	{
 		if (!iniParser->IsOpen())
 		{
-			DEBUG_LOG(LOG::FATAL, "Failed to open Engine Config file at location: {} Ensure that the Engine.ini is location at the correct file directory", EngineConfigFile);
+			DEBUG_LOG(LOG::WARNING, "Failed to open Engine Config file at location: {} Ensure that the Engine.ini is location at the correct file directory", EngineConfigFile);
 		}
 	}
 
