@@ -40,21 +40,31 @@ target_include_directories(AuxEngine PRIVATE
 # ------------------------------------
 # CONFIG
 # ------------------------------------
-# Define the root directory for config
 set(AUXENGINE_CONFIG_DIR "${CMAKE_BINARY_DIR}/config/")
-
-if(EXISTS ${AUXENGINE_CONFIG_DIR})
-    # Copy the config directory to the build output directory
-    add_custom_command(
-        TARGET AuxEngine POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-                ${CMAKE_SOURCE_DIR}/config
-                $<TARGET_FILE_DIR:AuxEngine>/config
-    )
-endif()
-
 target_compile_definitions(AuxEngine PRIVATE AUXENGINE_CONFIG_DIR="${AUXENGINE_CONFIG_DIR}")
 
+# Copy Config directory from this project into target directory.
+add_custom_command(
+        TARGET AuxEngine POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${PROJECT_SOURCE_DIR}/config
+                $<TARGET_FILE_DIR:AuxEngine>/config
+)
+
+
+# ------------------------------------
+# LOGO
+# ------------------------------------
+set(AUXENGINE_ASCII_LOGO "${CMAKE_BINARY_DIR}/ascii-logo.txt")
+target_compile_definitions(AuxEngine PRIVATE AUXENGINE_ASCII_LOGO="${AUXENGINE_ASCII_LOGO}")
+
+# Copy Ascii Logo file from this project into target directory.
+ add_custom_command(
+        TARGET AuxEngine POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${PROJECT_SOURCE_DIR}/ascii-logo.txt
+                $<TARGET_FILE_DIR:AuxEngine>/ascii-logo.txt
+)
 
 
 # ------------------------------------

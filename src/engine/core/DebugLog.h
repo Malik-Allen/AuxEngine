@@ -35,8 +35,8 @@ namespace  AuxEngine
 	}
 
 #if _DEBUG == 1	// ON
-	/* Creates brand new output file for logging */
-#define DEBUG_INIT() ( DebugLog::DebugLogInit() )
+	/* Creates brand new output file for logging. With an initial message for the output file. */
+#define DEBUG_INIT(InitMessage) ( DebugLog::DebugLogInit(InitMessage) )
 
 /* Logs error to output log */
 #define OUTPUT_FILE_LOG( LogType, Message, ... ) ( DebugLog::OutputFile_Log( LogType, Message, __FILE__, __FUNCTION__, __LINE__, __VA_ARGS__ ) )
@@ -76,11 +76,15 @@ namespace  AuxEngine
 		DebugLog( DebugLog&& ) = delete;
 		DebugLog& operator=( DebugLog&& ) = delete;
 
-		static void DebugLogInit()
+		static void DebugLogInit(const std::string& initMessage = "")
 		{
 			std::ofstream outputFile;
 			outputFile.open( outputLogFileName, std::ios::out );	// We create the file using out just to make sure it is there and clears it
+			outputFile << initMessage << std::endl;
+			outputFile.flush();
 			outputFile.close();
+
+			std::cout << initMessage << std::endl;
 		}
 
 		template<typename ... Args>
