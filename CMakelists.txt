@@ -43,7 +43,7 @@ target_include_directories(AuxEngine PRIVATE
 # Define the root directory for config
 set(AUXENGINE_CONFIG_DIR "${CMAKE_BINARY_DIR}/config/")
 
-if(EXISTS $AUXENGINE_CONFIG_DIR)
+if(EXISTS ${AUXENGINE_CONFIG_DIR})
     # Copy the config directory to the build output directory
     add_custom_command(
         TARGET AuxEngine POST_BUILD
