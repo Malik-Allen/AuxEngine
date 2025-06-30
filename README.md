@@ -1,4 +1,6 @@
-# Aux
+# Aux 
+
+![logo](resources/logo/aux-logo-128x.png)
 
 #### *Providing supplementary or additional help and support.*
 
