@@ -40,7 +40,7 @@ target_include_directories(AuxEngine PRIVATE
 # ------------------------------------
 # CONFIG
 # ------------------------------------
-set(AUXENGINE_CONFIG_DIR "${CMAKE_BINARY_DIR}/config/")
+set(AUXENGINE_CONFIG_DIR "$<TARGET_FILE_DIR:AuxEngine>/config/")
 target_compile_definitions(AuxEngine PRIVATE AUXENGINE_CONFIG_DIR="${AUXENGINE_CONFIG_DIR}")
 
 # Copy Config directory from this project into target directory.
@@ -55,7 +55,7 @@ add_custom_command(
 # ------------------------------------
 # LOGO
 # ------------------------------------
-set(AUXENGINE_ASCII_LOGO "${CMAKE_BINARY_DIR}/ascii-logo.txt")
+set(AUXENGINE_ASCII_LOGO "$<TARGET_FILE_DIR:AuxEngine>/ascii-logo.txt")
 target_compile_definitions(AuxEngine PRIVATE AUXENGINE_ASCII_LOGO="${AUXENGINE_ASCII_LOGO}")
 
 # Copy Ascii Logo file from this project into target directory.
