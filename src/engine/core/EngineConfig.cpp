@@ -7,7 +7,7 @@
 
 namespace  AuxEngine
 {
-	static const std::string EngineConfigFile(std::string(AUXENGINE_CONFIG_DIR) + "Engine.ini");
+	static const std::string EngineConfigFile(std::string(AUXENGINE_CONFIG_DIR) + "AuxEngine.ini");
 	
 	static const std::string WindowSection("Window");
 	static const std::string GraphicsSection("Graphics");
