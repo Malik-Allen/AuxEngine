@@ -50,7 +50,7 @@ namespace  AuxEngine
 #else	// OFF
 
 	/* Creates brand new output file for logging */
-#define DEBUG_INIT()
+#define DEBUG_INIT(InitMessage)
 
 /* Logs error to output log */
 #define OUTPUT_FILE_LOG( LogType, Message )
