@@ -8,31 +8,29 @@
 #include <iostream>
 #include <fstream>
 
-namespace  AuxEngine
+enum class LOG : unsigned short
 {
-	enum class LOG : unsigned short
-	{
-		NONE = 0,
-		FATAL = 1,
-		ERRORLOG = 2,
-		WARNING = 3,
-		TRACE = 4,
-		INFO = 5
-	};
+	NONE = 0,
+	FATAL = 1,
+	ERRORLOG = 2,
+	WARNING = 3,
+	TRACE = 4,
+	INFO = 5
+};
 
-	constexpr static const char* ToString( LOG logType )
+constexpr static const char* ToString( LOG logType )
+{
+	switch( logType )
 	{
-		switch( logType )
-		{
-		case LOG::NONE:			return "NONE";
-		case LOG::FATAL:		return "FATAL ERROR";
-		case LOG::ERRORLOG:		return "ERROR";
-		case LOG::WARNING:		return "WARNING";
-		case LOG::TRACE:		return "TRACE";
-		case LOG::INFO:			return "INFO";
-		default:				return "UNKNOWN";
-		}
+	case LOG::NONE:			return "NONE";
+	case LOG::FATAL:		return "FATAL ERROR";
+	case LOG::ERRORLOG:		return "ERROR";
+	case LOG::WARNING:		return "WARNING";
+	case LOG::TRACE:		return "TRACE";
+	case LOG::INFO:			return "INFO";
+	default:				return "UNKNOWN";
 	}
+}
 
 #if _DEBUG == 1	// ON
 	/* Creates brand new output file for logging. With an initial message for the output file. */
@@ -67,116 +65,116 @@ namespace  AuxEngine
 /*
 *	Utility class for functionality around logging to console and output file
 */
-	class DebugLog
+class DebugLog
+{
+public:
+	DebugLog() = delete;	// Static class, no constructor needed
+	DebugLog( const DebugLog& ) = delete;
+	DebugLog& operator=( const DebugLog& ) = delete;
+	DebugLog( DebugLog&& ) = delete;
+	DebugLog& operator=( DebugLog&& ) = delete;
+
+	static void DebugLogInit(const std::string& initMessage = "")
 	{
-	public:
-		DebugLog() = delete;	// Static class, no constructor needed
-		DebugLog( const DebugLog& ) = delete;
-		DebugLog& operator=( const DebugLog& ) = delete;
-		DebugLog( DebugLog&& ) = delete;
-		DebugLog& operator=( DebugLog&& ) = delete;
+		std::ofstream outputFile;
+		outputFile.open( outputLogFileName, std::ios::out );	// We create the file using out just to make sure it is there and clears it
+		outputFile << initMessage << std::endl;
+		outputFile.flush();
+		outputFile.close();
 
-		static void DebugLogInit(const std::string& initMessage = "")
-		{
-			std::ofstream outputFile;
-			outputFile.open( outputLogFileName, std::ios::out );	// We create the file using out just to make sure it is there and clears it
-			outputFile << initMessage << std::endl;
-			outputFile.flush();
-			outputFile.close();
+		std::cout << initMessage << std::endl;
+	}
 
-			std::cout << initMessage << std::endl;
-		}
+	template<typename ... Args>
+	static void OutputFile_Log( const LOG logType,
+		const std::string& message,
+		const std::string& fileName,
+		const std::string& function,
+		const int line,
+		Args&& ... args )
+	{
+		std::ofstream outputFile;
+		outputFile.open( outputLogFileName, std::ios::app | std::ios::out );
 
-		template<typename ... Args>
-		static void OutputFile_Log( const LOG logType,
-			const std::string& message,
-			const std::string& fileName,
-			const std::string& function,
-			const int line,
-			Args&& ... args )
-		{
-			std::ofstream outputFile;
-			outputFile.open( outputLogFileName, std::ios::app | std::ios::out );
+		/*[05/15/22|21:33:51][INFO]:	FunctionName(00):	Message {}*/
+		std::string output;
+		output.append( BuildTimeStamp() );
+		output.append( "[" );
+		output.append( ToString( logType ) );
+		output.append( "]" );
+		output.append( BuildFunctionSignature(fileName, line ) );
+		output.append( ": " );
+		output.append( message );
+		output.append( "\n" );
 
-			/*[05/15/22|21:33:51][INFO]:	FunctionName(00):	Message {}*/
-			std::string output;
-			output.append( BuildTimeStamp() );
-			output.append( "[" );
-			output.append( ToString( logType ) );
-			output.append( "]" );
-			output.append( BuildFunctionSignature(fileName, line ) );
-			output.append( ": " );
-			output.append( message );
-			output.append( "\n" );
+		outputFile << std::vformat( output, std::make_format_args( std::forward<Args>( args )... ) );
 
-			outputFile << std::vformat( output, std::make_format_args( std::forward<Args>( args )... ) );
-
-			outputFile.flush();
-			outputFile.close();
-		};
-
-
-		template<typename ... Args>
-		static void Console_Log( const LOG logType,
-			const std::string& message,
-			const std::string& fileName,
-			const std::string& function,
-			const int line,
-			Args&& ... args )
-		{
-			/*[05/15/22|21:33:51][INFO]:	FunctionName(00):	Message {}*/
-			std::string output;
-			output.append( BuildTimeStamp() );
-			output.append( "[" );
-			output.append( ToString( logType ) );
-			output.append( "]" );
-			output.append( BuildFunctionSignature(fileName, line ) );
-			output.append( ": " );
-			output.append( message );
-			output.append( "\n" );
-
-			std::cout << std::vformat( output, std::make_format_args( std::forward<Args>( args )... ) );
-		};
-
-	private:
-		inline static std::string outputLogFileName = "Output-Log.txt";
-
-		/* Returns a string in the format: [05/15/22|21:33:51]*/
-		static std::string BuildTimeStamp()
-		{
-			/*
-			*	Code to obtain Date and Time stamps, adapted from:
-			*	https://www.daniweb.com/programming/software-development/threads/177665/help-with-asctime-s-and-localtime-s
-			*/
-			char date[9];
-			_strdate_s( date );
-			char timestamp[9];
-			_strtime_s( timestamp );
-
-			/*[05/15/22|21:33:51]*/
-			std::string dateTime;
-			dateTime.append( "[" );
-			dateTime.append( std::string( date ) );
-			dateTime.append( "|" );
-			dateTime.append( std::string( timestamp ) );
-			dateTime.append( "]" );
-
-			return dateTime;
-		}
-
-		/* Returns a string in the format: FunctionName(00)*/
-		static std::string BuildFunctionSignature( const std::string& function, const int lineNumber )
-		{
-			/*FunctionName(00):*/
-			std::string signature;
-			signature.append("[");
-			signature.append( function );
-			signature.append( ":" );
-			signature.append( std::to_string( lineNumber ) );
-			signature.append("]");
-			return signature;
-		}
+		outputFile.flush();
+		outputFile.close();
 	};
-}
+
+
+	template<typename ... Args>
+	static void Console_Log( const LOG logType,
+		const std::string& message,
+		const std::string& fileName,
+		const std::string& function,
+		const int line,
+		Args&& ... args )
+	{
+		/*[05/15/22|21:33:51][INFO]:	FunctionName(00):	Message {}*/
+		std::string output;
+		output.append( BuildTimeStamp() );
+		output.append( "[" );
+		output.append( ToString( logType ) );
+		output.append( "]" );
+		output.append( BuildFunctionSignature(fileName, line ) );
+		output.append( ": " );
+		output.append( message );
+		output.append( "\n" );
+
+		std::cout << std::vformat( output, std::make_format_args( std::forward<Args>( args )... ) );
+	};
+
+private:
+	inline static std::string outputLogFileName = "Output-Log.txt";
+
+	/* Returns a string in the format: [05/15/22|21:33:51]*/
+	static std::string BuildTimeStamp()
+	{
+		/*
+		*	Code to obtain Date and Time stamps, adapted from:
+		*	https://www.daniweb.com/programming/software-development/threads/177665/help-with-asctime-s-and-localtime-s
+		*/
+		char date[9];
+		_strdate_s( date );
+		char timestamp[9];
+		_strtime_s( timestamp );
+
+		/*[05/15/22|21:33:51]*/
+		std::string dateTime;
+		dateTime.append( "[" );
+		dateTime.append( std::string( date ) );
+		dateTime.append( "|" );
+		dateTime.append( std::string( timestamp ) );
+		dateTime.append( "]" );
+
+		return dateTime;
+	}
+
+	/* Returns a string in the format: FunctionName(00)*/
+	static std::string BuildFunctionSignature( const std::string& function, const int lineNumber )
+	{
+		/*FunctionName(00):*/
+		std::string signature;
+		signature.append("[");
+		signature.append( function );
+		signature.append( ":" );
+		signature.append( std::to_string( lineNumber ) );
+		signature.append("]");
+		return signature;
+	}
+};
+
 
 #endif	// AUX_DEBUGLOG_H
