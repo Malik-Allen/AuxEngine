@@ -1,11 +1,28 @@
-# Aux 
+﻿![logo](docs/img/aux-logo-128x.png)
 
-![logo](resources/logo/aux-logo-128x.png)
+# Aux Engine
 
-#### *Providing supplementary or additional help and support.*
+*Auxiliary*, providing supplementary or additional help and support.
 
+---
 
-## Auxiliary Engine
-This engine was created to serve as support to hardware & software development.
+# Engine
 
-It's a relatively low-overhead library of tools, mostly with single file headers wrapped for convenience.
+AuxEngine is a lightweight and modular development engine created to support my explorations in software and hardware developemnt. A sort of mini/companion engine, with systems that I use across projects commonly. Aux Engine can function standalone as well and used a foundation for a larger engine.
+
+## Key Features
+
+| System               | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| **File I/O**          | Systems for reading/writing text and binary files.   |
+| **Input Handling**    | Flexible keyboard/mouse/gamepad input system for interactive applications.         |
+| **High-Resolution Timer** | Precision timer utilities for benchmarking and time-sensitive operations. |
+| **Logging System**    | Logging with customizable output and verbosity levels.         |
+
+## Use Cases
+
+- Embedded hardware applications
+- Game engine or graphics engine development
+- Simulation and timing-critical software
+- CLI tools or GUI applications
+- Prototyping software that integrates with custom electronics
