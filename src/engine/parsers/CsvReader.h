@@ -21,18 +21,18 @@ namespace AuxEngine
         CsvReader& operator=(CsvReader&&) = delete;
 
         explicit CsvReader(const std::string& filePath)
-            : reader(filePath)
+            : reader_(filePath)
         {}
 
         CsvReader(const std::string& filePath, const csv::CSVFormat& format)
-            : reader(filePath, format)
+            : reader_(filePath, format)
         {}
 
-        Iterator begin() { return reader.begin(); }
-        Iterator end() { return reader.end(); }
+        Iterator begin() { return reader_.begin(); }
+        Iterator end() { return reader_.end(); }
 
     private:
-        csv::CSVReader reader;
+        csv::CSVReader reader_;
     };
 }
 

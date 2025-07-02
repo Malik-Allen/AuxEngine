@@ -79,7 +79,7 @@ namespace AuxEngine
 		static void DebugLogInit(const std::string& initMessage = "")
 		{
 			std::ofstream outputFile;
-			outputFile.open(outputLogFileName, std::ios::out);	// We create the file using out just to make sure it is there and clears it
+			outputFile.open(outputLogFileName_, std::ios::out);	// We create the file using out just to make sure it is there and clears it
 			outputFile << initMessage << std::endl;
 			outputFile.flush();
 			outputFile.close();
@@ -96,7 +96,7 @@ namespace AuxEngine
 			Args&& ... args)
 		{
 			std::ofstream outputFile;
-			outputFile.open(outputLogFileName, std::ios::app | std::ios::out);
+			outputFile.open(outputLogFileName_, std::ios::app | std::ios::out);
 
 			/*[05/15/22|21:33:51][INFO]:	FunctionName(00):	Message {}*/
 			std::string output;
@@ -139,7 +139,7 @@ namespace AuxEngine
 		};
 
 	private:
-		inline static std::string outputLogFileName = "Output-Log.txt";
+		inline static std::string outputLogFileName_ = "Output-Log.txt";
 
 		/* Returns a string in the format: [05/15/22|21:33:51]*/
 		static std::string BuildTimeStamp()

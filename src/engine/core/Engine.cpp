@@ -48,16 +48,16 @@ namespace  AuxEngine
 )";
 
     Engine::Engine() :
-        m_isRunning( false ),
-        m_clock( std::make_unique<EngineClock>() ),
-        m_windowHandler( nullptr ),
-        m_inputHandler(GLFWInputHandler::Get()),
-        m_app(std::make_unique<IApp>())
+        isRunning_( false ),
+        clock_( std::make_unique<EngineClock>() ),
+        windowHandler_( nullptr ),
+        inputHandler_(GLFWInputHandler::Get()),
+        app_(std::make_unique<App>())
     {}
 
     Engine::~Engine()
     {
-		if (m_isRunning)
+		if (isRunning_)
 		{
 			Shutdown();
 		}
@@ -65,13 +65,13 @@ namespace  AuxEngine
 
     void Engine::Update( const float deltaTime )
     {
-        m_windowHandler->ProcessEvents();
-        m_inputHandler.Update(deltaTime);
-        m_app->Update(deltaTime);
+        windowHandler_->ProcessEvents();
+        inputHandler_.Update(deltaTime);
+        app_->Update(deltaTime);
 
-        if (m_inputHandler.IsKeyDown(Key::Escape))
+        if (inputHandler_.IsKeyDown(Key::Escape))
         {
-            m_isRunning = false;
+            isRunning_ = false;
         }
     }
 
@@ -88,46 +88,46 @@ namespace  AuxEngine
         const unsigned int height = engineConfig.GetWindowHeight();
         const unsigned int fps = engineConfig.GetMaxFPS();
         
-        m_isRunning = false;
+        isRunning_ = false;
 
-        m_clock->SetFPS(fps);
+        clock_->SetFPS(fps);
 
-        m_windowHandler = std::make_unique<GLFWWindowHandler>();
-        if (!m_windowHandler->InitializeWindow(width, height, name))
+        windowHandler_ = std::make_unique<GLFWWindowHandler>();
+        if (!windowHandler_->InitializeWindow(width, height, name))
         {
             return;
         }
 
-        if (!m_inputHandler.Initialize(m_windowHandler.get()))
+        if (!inputHandler_.Initialize(windowHandler_.get()))
         {
             return;
         }
 
-        m_isRunning = true;
+        isRunning_ = true;
 
         DEBUG_LOG(LOG::INFO, "Wake up protocol complete!");
     }
 
-    bool Engine::LoadApp( IApp* app )
+    bool Engine::LoadApp( App* app )
     {
         if( !app )
         {
             return false;
         }
-        m_app.reset( app );
-        return m_app->Enter();
+        app_.reset( app );
+        return app_->Enter();
     }
 
     void Engine::Run()
     {
-        while( m_isRunning )
+        while( isRunning_ )
         {
-            m_clock->UpdateFrameTicks();
-            Update( m_clock->GetDeltaTime() );
-            Sleep( m_clock->GetSleepTime( m_clock->GetFPS() ) );    // TODO: Not optimal and should be replaced with a better sleep function
+            clock_->UpdateFrameTicks();
+            Update( clock_->GetDeltaTime() );
+            Sleep( clock_->GetSleepTime( clock_->GetFPS() ) );    // TODO: Not optimal and should be replaced with a better sleep function
         }
 
-        if( !m_isRunning )
+        if( !isRunning_ )
         {
             Shutdown();
         }
@@ -137,18 +137,18 @@ namespace  AuxEngine
     {
         DEBUG_LOG(LOG::INFO, "Shutting down...");
 
-        m_isRunning = false;
+        isRunning_ = false;
 
-        if( m_app )
+        if( app_ )
         {
-            m_app->Exit();
-            m_app.reset();
+            app_->Exit();
+            app_.reset();
         }
 
-        if( m_windowHandler )
+        if( windowHandler_ )
         {
-            m_windowHandler->Shutdown();
-            m_windowHandler.reset();
+            windowHandler_->Shutdown();
+            windowHandler_.reset();
         }
 
         DEBUG_LOG(LOG::INFO, "Night, night.");

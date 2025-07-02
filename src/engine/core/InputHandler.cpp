@@ -9,27 +9,27 @@ namespace  AuxEngine
 {
 	InputHandler::InputHandler()
 	{
-		m_trackedInputDevices.fill(0);
+		trackedInputDevices_.fill(0);
 
 		// By default the keyboard and mouse devices are assumed to be connected.
-		m_trackedInputDevices[KEYBOARD_INDEX] = 1;	
-		m_trackedInputDevices[MOUSE_INDEX] = 1;
+		trackedInputDevices_[KEYBOARD_INDEX] = 1;	
+		trackedInputDevices_[MOUSE_INDEX] = 1;
 	}
 
 	bool InputHandler::IsGamepadConnected(GamepadId gamepadId) const
 	{
-		return m_trackedInputDevices[static_cast<int>(gamepadId)] != 0;
+		return trackedInputDevices_[static_cast<int>(gamepadId)] != 0;
 	}
 
 	void InputHandler::DeviceConnected(const int inputDeviceId, InputDevice device)
 	{
-		m_trackedInputDevices[inputDeviceId] = 1;
+		trackedInputDevices_[inputDeviceId] = 1;
 		OnDeviceConnected(inputDeviceId, device);
 	}
 
 	void InputHandler::DeviceDisconnected(const int inputDeviceId, InputDevice device)
 	{
-		m_trackedInputDevices[inputDeviceId] = 0;
+		trackedInputDevices_[inputDeviceId] = 0;
 		OnDeviceDisconnected(inputDeviceId, device);
 	}
 
@@ -37,7 +37,7 @@ namespace  AuxEngine
 	{
 		if (key != Key::MAX && action != InputAction::Unknown)
 		{
-			m_trackedInputCallbacks[KEYBOARD_INDEX][static_cast<int>(key)] = InputCallbackBinding(inputCallback, static_cast<int>(action));
+			trackedInputCallbacks_[KEYBOARD_INDEX][static_cast<int>(key)] = InputCallbackBinding(inputCallback, static_cast<int>(action));
 		}
 	}
 
@@ -45,7 +45,7 @@ namespace  AuxEngine
 	{
 		if (button != MouseButton::MAX && action != InputAction::Unknown)
 		{
-			m_trackedInputCallbacks[MOUSE_INDEX][static_cast<int>(button)] = InputCallbackBinding(inputCallback, static_cast<int>(action));
+			trackedInputCallbacks_[MOUSE_INDEX][static_cast<int>(button)] = InputCallbackBinding(inputCallback, static_cast<int>(action));
 		}
 	}
 
@@ -53,7 +53,7 @@ namespace  AuxEngine
 	{
 		if (axis != MouseScrollAxis::MAX && action != AxisAction::Unknown)
 		{
-			m_trackedAxisCallbacks[MOUSE_INDEX][static_cast<int>(axis)] = AxisCallbackBinding(axisCallback, static_cast<int>(action));
+			trackedAxisCallbacks_[MOUSE_INDEX][static_cast<int>(axis)] = AxisCallbackBinding(axisCallback, static_cast<int>(action));
 		}
 	}
 
@@ -61,7 +61,7 @@ namespace  AuxEngine
 	{
 		if (gamepadId != GamepadId::MAX && button != GamepadButton::MAX && action != InputAction::Unknown)
 		{
-			m_trackedInputCallbacks[static_cast<int>(gamepadId)][static_cast<int>(button)] = InputCallbackBinding(inputCallback, static_cast<int>(action));
+			trackedInputCallbacks_[static_cast<int>(gamepadId)][static_cast<int>(button)] = InputCallbackBinding(inputCallback, static_cast<int>(action));
 		}
 	}
 
@@ -69,30 +69,30 @@ namespace  AuxEngine
 	{
 		if (gamepadId != GamepadId::MAX && axis != GamepadAxis::MAX && action != AxisAction::Unknown)
 		{
-			m_trackedAxisCallbacks[static_cast<int>(gamepadId)][static_cast<int>(axis)] = AxisCallbackBinding(axisCallback, static_cast<int>(action));
+			trackedAxisCallbacks_[static_cast<int>(gamepadId)][static_cast<int>(axis)] = AxisCallbackBinding(axisCallback, static_cast<int>(action));
 		}
 	}
 
 	void InputHandler::ClearKeyBinding(Key key)
 	{
-		m_trackedInputCallbacks[KEYBOARD_INDEX].erase(static_cast<int>(key));
+		trackedInputCallbacks_[KEYBOARD_INDEX].erase(static_cast<int>(key));
 	}
 
 	void InputHandler::ClearMouseButtonBinding(MouseButton button)
 	{
-		m_trackedInputCallbacks[MOUSE_INDEX].erase(static_cast<int>(button));
+		trackedInputCallbacks_[MOUSE_INDEX].erase(static_cast<int>(button));
 	}
 
 	void InputHandler::ClearMouseScrollAxisBinding(MouseScrollAxis axis)
 	{
-		m_trackedAxisCallbacks[MOUSE_INDEX].erase(static_cast<int>(axis));
+		trackedAxisCallbacks_[MOUSE_INDEX].erase(static_cast<int>(axis));
 	}
 
 	void InputHandler::ClearGamepadButtonBinding(GamepadId gamepadId, GamepadButton button)
 	{
 		if (gamepadId != GamepadId::MAX)
 		{
-			m_trackedInputCallbacks[static_cast<int>(gamepadId)].erase(static_cast<int>(button));
+			trackedInputCallbacks_[static_cast<int>(gamepadId)].erase(static_cast<int>(button));
 		}
 	}
 
@@ -100,7 +100,7 @@ namespace  AuxEngine
 	{
 		if (gamepadId != GamepadId::MAX)
 		{
-			m_trackedAxisCallbacks[static_cast<int>(gamepadId)].erase(static_cast<int>(axis));
+			trackedAxisCallbacks_[static_cast<int>(gamepadId)].erase(static_cast<int>(axis));
 		}
 	}
 
@@ -148,29 +148,29 @@ namespace  AuxEngine
 	{
 		for (int i = 0; i < MAX_INPUT_DEVICE_COUNT; ++i)
 		{
-			for (const auto& [buttonId, inputCallbackBinding] : m_trackedInputCallbacks[i])
+			for (const auto& [buttonId, inputCallbackBinding] : trackedInputCallbacks_[i])
 			{
-				InputInstance inputInstance = m_trackedInputs[i][buttonId];
+				InputInstance inputInstance = trackedInputs_[i][buttonId];
 				if (inputCallbackBinding.action != -1 
 					&& inputInstance.bIsConsumed == false
 					&& static_cast<int>(inputInstance.cachedAction) == inputCallbackBinding.action)
 				{
 					inputCallbackBinding.inputCallback(buttonId, inputCallbackBinding.action);
 					inputInstance.bIsConsumed = true;
-					m_trackedInputs[i][buttonId] = inputInstance;
+					trackedInputs_[i][buttonId] = inputInstance;
 				}
 			}
 
-			for (const auto& [axisId, axisCallbackBinding] : m_trackedAxisCallbacks[i])
+			for (const auto& [axisId, axisCallbackBinding] : trackedAxisCallbacks_[i])
 			{
-				InputInstance inputInstance = m_trackedAxes[i][axisId];
+				InputInstance inputInstance = trackedAxes_[i][axisId];
 				if (axisCallbackBinding.axisAction != -1
 					&& inputInstance.bIsConsumed == false
 					&& static_cast<int>(inputInstance.cachedAxisAction) == axisCallbackBinding.axisAction)
 				{
 					axisCallbackBinding.axisCallback(axisId, axisCallbackBinding.axisAction, inputInstance.currInputEvent.value);
 					inputInstance.bIsConsumed = true;
-					m_trackedAxes[i][axisId] = inputInstance;
+					trackedAxes_[i][axisId] = inputInstance;
 				}
 			}
 		}
@@ -183,7 +183,7 @@ namespace  AuxEngine
 			return;
 		}
 
-		InputInstance inputInstance = m_trackedInputs[inputDeviceId][inputEvent.button];
+		InputInstance inputInstance = trackedInputs_[inputDeviceId][inputEvent.button];
 
 		// Updating Input Events if the incoming action is different than the last action.
 		if (inputInstance.currInputEvent.action != inputEvent.action)
@@ -214,7 +214,7 @@ namespace  AuxEngine
 			inputInstance.cachedAction = currAction;
 		}
 
-		m_trackedInputs[inputDeviceId][inputEvent.button] = inputInstance;
+		trackedInputs_[inputDeviceId][inputEvent.button] = inputInstance;
 	}
 
 	void InputHandler::ProcessAxisInput(const unsigned int inputDeviceId, const InputEvent& inputEvent)
@@ -224,7 +224,7 @@ namespace  AuxEngine
 			return;
 		}
 
-		InputInstance inputInstance = m_trackedAxes[inputDeviceId][inputEvent.button];
+		InputInstance inputInstance = trackedAxes_[inputDeviceId][inputEvent.button];
 
 		const bool bIsTriggerAxis = IsTriggerAxis(static_cast<GamepadAxis>(inputEvent.button));
 
@@ -257,7 +257,7 @@ namespace  AuxEngine
 			inputInstance.cachedAxisAction = AxisAction::Unknown;
 		}
 
-		m_trackedAxes[inputDeviceId][inputEvent.button] = inputInstance;
+		trackedAxes_[inputDeviceId][inputEvent.button] = inputInstance;
 	}
 
 	bool InputHandler::IsTriggerAxis(GamepadAxis axis) const

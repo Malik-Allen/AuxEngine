@@ -5,12 +5,12 @@
 
 #include "Singleton.h"
 
-namespace  AuxEngine
+namespace AuxEngine
 {
     class EngineClock;
-    class IWindowHandler;
+    class WindowHandler;
     class InputHandler;
-    class IApp;
+    class App;
 
     class Engine : public Singleton<Engine>
     {
@@ -27,23 +27,23 @@ namespace  AuxEngine
         ~Engine() override;
 
     private:
-        bool m_isRunning;
-        std::unique_ptr<EngineClock> m_clock;
-        std::unique_ptr<IWindowHandler> m_windowHandler;
-        InputHandler& m_inputHandler;
-        std::unique_ptr<IApp> m_app;
+        bool isRunning_;
+        std::unique_ptr<EngineClock> clock_;
+        std::unique_ptr<WindowHandler> windowHandler_;
+        InputHandler& inputHandler_;
+        std::unique_ptr<App> app_;
 
         void Update( const float deltaTime );
 
     public:
         void Start();
-        bool LoadApp( IApp* app );
+        bool LoadApp( App* app );
         void Run();
-        bool IsRunning() const { return m_isRunning; }
+        bool IsRunning() const { return isRunning_; }
         void Shutdown();
 
-        InputHandler& GetInputHandler() const { return m_inputHandler; }
-        const EngineClock& GetClock() const { return *m_clock; }
+        InputHandler& GetInputHandler() const { return inputHandler_; }
+        const EngineClock& GetClock() const { return *clock_; }
     };
 }
 

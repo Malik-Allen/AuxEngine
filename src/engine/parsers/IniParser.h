@@ -22,62 +22,62 @@ namespace AuxEngine
 
         std::string GetString(const std::string& section, const std::string& key)
         {
-            return Parser[section][key];
+            return parser_[section][key];
         }
 
         int GetInteger(const std::string& section, const std::string& key)
         {
-            return Parser[section][key].as<int>();
+            return parser_[section][key].as<int>();
         }
 
         float GetFloat(const std::string& section, const std::string& key)
         {
-            return Parser[section][key].as<float>();
+            return parser_[section][key].as<float>();
         }
 
         bool GetBoolean(const std::string& section, const std::string& key)
         {
-            return Parser[section][key].as<bool>();
+            return parser_[section][key].as<bool>();
         }
 
         std::vector<std::string> Sections() const
         {
-            return Parser.sections();
+            return parser_.sections();
         }
 
         std::vector<std::string> Keys(const std::string& section) 
         {
-            return Parser[section].keys();
+            return parser_[section].keys();
         }
 
         bool HasSection(const std::string& section) const
         {
-            return Parser.contains(section);
+            return parser_.contains(section);
         }
 
         bool HasValue(const std::string& section, const std::string& key)
         {
-            return Parser.contains(section) && Parser[section].contains(key);
+            return parser_.contains(section) && parser_[section].contains(key);
         }
 
         template <typename T>
         void Set(const std::string& section, const std::string& key, const T& value)
         {
-            Parser.set(section, key, value);
+            parser_.set(section, key, value);
         }
 
         bool LoadFile(const std::string& filePath)
         {
-            return Parser.load(filePath);
+            return parser_.load(filePath);
         }
 
         bool WriteToFile(const std::string& filePath) const
         {
-            return Parser.save(filePath);
+            return parser_.save(filePath);
         }
 
     private:
-        Ini Parser;
+        Ini parser_;
     };
 }
 

@@ -9,7 +9,7 @@
 
 namespace  AuxEngine
 {
-    class IWindowHandler;
+    class WindowHandler;
 
     enum class GamepadId : int
     {
@@ -316,7 +316,7 @@ namespace  AuxEngine
         InputHandler();
         virtual ~InputHandler() = default;
 
-        virtual bool Initialize(IWindowHandler* windowHandler) = 0;
+        virtual bool Initialize(WindowHandler* windowHandler) = 0;
         virtual void Update(const float deltaTime) = 0;
         virtual bool IsKeyDown(Key key) const = 0;
         virtual bool IsGamepadButtonDown(GamepadId gamepadId, GamepadButton button) const = 0;
@@ -363,12 +363,12 @@ namespace  AuxEngine
 
     private:
         // Value of 1 at the given device index, means device is connected. Value of 0 means the device at the given index is not connected.
-        std::array<int, MAX_INPUT_DEVICE_COUNT> m_trackedInputDevices = {};
-        std::unordered_map<int /*Device Input Id*/, TrackedInputMap> m_trackedInputs;
-        std::unordered_map<int /*Device Input Id*/, InputCallbackMap> m_trackedInputCallbacks;
+        std::array<int, MAX_INPUT_DEVICE_COUNT> trackedInputDevices_ = {};
+        std::unordered_map<int /*Device Input Id*/, TrackedInputMap> trackedInputs_;
+        std::unordered_map<int /*Device Input Id*/, InputCallbackMap> trackedInputCallbacks_;
 
-        std::unordered_map<int /*Device Input Id*/, TrackedInputMap> m_trackedAxes;
-        std::unordered_map<int /*Device Input Id*/, AxisCallbackMap> m_trackedAxisCallbacks;
+        std::unordered_map<int /*Device Input Id*/, TrackedInputMap> trackedAxes_;
+        std::unordered_map<int /*Device Input Id*/, AxisCallbackMap> trackedAxisCallbacks_;
 
         void ProcessButtonInput(const unsigned int inputDeviceId, const InputEvent& inputEvent);
         void ProcessAxisInput(const unsigned int inputDeviceId, const InputEvent& inputEvent);

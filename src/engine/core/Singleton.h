@@ -10,7 +10,7 @@ namespace  AuxEngine
     template <typename T>
     class Singleton
     {
-        inline static std::unique_ptr<T> g_instance = nullptr;
+        inline static std::unique_ptr<T> instance_ = nullptr;
         friend std::default_delete<T>;
 
     public:
@@ -26,12 +26,12 @@ namespace  AuxEngine
     public:
         static T& Get()
         {
-            if( !g_instance )
+            if( !instance_ )
             {
-                g_instance.reset( new T() );
+                instance_.reset( new T() );
             }
 
-            return *g_instance.get();
+            return *instance_.get();
         }
     };
 }

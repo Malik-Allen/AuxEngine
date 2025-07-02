@@ -7,16 +7,16 @@
 
 namespace  AuxEngine
 {
-    class IWindowHandler
+    class WindowHandler
     {
     public:
-        IWindowHandler( const IWindowHandler& ) = delete;
-        IWindowHandler& operator=( const IWindowHandler& ) = delete;
-        IWindowHandler( IWindowHandler&& ) = delete;
-        IWindowHandler& operator=( IWindowHandler&& ) = delete;
+        WindowHandler( const WindowHandler& ) = delete;
+        WindowHandler& operator=( const WindowHandler& ) = delete;
+        WindowHandler( WindowHandler&& ) = delete;
+        WindowHandler& operator=( WindowHandler&& ) = delete;
 
-        IWindowHandler() = default;
-        virtual ~IWindowHandler() = default;
+        WindowHandler() = default;
+        virtual ~WindowHandler() = default;
 
         virtual bool InitializeWindow( const int width, const int height, const std::string& name ) = 0;
         virtual bool IsWindowOpen() const = 0;

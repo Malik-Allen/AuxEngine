@@ -27,7 +27,7 @@ namespace  AuxEngine
         GLFWInputHandler();
         ~GLFWInputHandler() override = default;
 
-        virtual bool Initialize(IWindowHandler* windowHandler) override;
+        virtual bool Initialize(WindowHandler* windowHandler) override;
         virtual void Update(const float deltaTime) override;
         virtual bool IsKeyDown(Key key) const override;
         virtual bool IsGamepadButtonDown(GamepadId gamepadId, GamepadButton button) const override;
@@ -38,7 +38,7 @@ namespace  AuxEngine
         virtual void OnDeviceDisconnected(const int inputDeviceId, InputDevice device) override;
 
     private:
-        const GLFWWindowHandler* m_windowHandler;
+        const GLFWWindowHandler* windowHandler_;
 
         // Detects all devices connected for input.
         void RefreshConnectedInputDevices();

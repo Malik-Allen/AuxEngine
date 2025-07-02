@@ -7,39 +7,39 @@ namespace  AuxEngine
 {
     // TODO: Add logic to properly handle appliaction Exit and correct handling in Engine for when the application has been exited.
 
-    class IApp
+    class App
     {
     public:
-        IApp( const IApp& ) = delete;
-        IApp& operator=( const IApp& ) = delete;
-        IApp( IApp&& ) = delete;
-        IApp& operator=( IApp&& ) = delete;
+        App( const App& ) = delete;
+        App& operator=( const App& ) = delete;
+        App( App&& ) = delete;
+        App& operator=( App&& ) = delete;
 
-        IApp() = default;
-        virtual ~IApp()
+        App() = default;
+        virtual ~App()
         {
             Exit();
         }
 
         bool Enter()
         {
-            return IApp_Enter();
+            return OnEnter();
         }
 
         void Update( const float deltaTime )
         {
-            IApp_Update( deltaTime );
+            OnUpdate( deltaTime );
         }
 
         void Exit()
         {
-            IApp_Exit();
+            OnExit();
         }
 
     private:
-        virtual bool IApp_Enter() { return true; }
-        virtual void IApp_Update( const float deltaTime ) {}
-        virtual void IApp_Exit() {}
+        virtual bool OnEnter() { return true; }
+        virtual void OnUpdate( const float deltaTime ) {}
+        virtual void OnExit() {}
     };
 }
 

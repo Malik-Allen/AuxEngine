@@ -17,32 +17,32 @@ namespace  AuxEngine
 
         EngineClock() :
             HighResTimer(),
-            m_prevTicks( 0 ),
-            m_currentTicks( 0 ),
-            m_fps( 120 )
+            prevTicks_( 0 ),
+            currentTicks_( 0 ),
+            fps_( 120 )
         {
             Reset();
         }
 
         ~EngineClock() override = default;
 
-        unsigned int GetFPS() const { return m_fps; }
-        void SetFPS( unsigned int fps ) { m_fps = fps; }
+        unsigned int GetFPS() const { return fps_; }
+        void SetFPS( unsigned int fps ) { fps_ = fps; }
 
         void Reset()
         {
-            m_prevTicks = m_currentTicks = HighResTimer::GetCurrentTimeInMilliSeconds();
+            prevTicks_ = currentTicks_ = HighResTimer::GetCurrentTimeInMilliSeconds();
         }
 
         void UpdateFrameTicks()
         {
-            m_prevTicks = m_currentTicks;
-            m_currentTicks = HighResTimer::GetCurrentTimeInMilliSeconds();
+            prevTicks_ = currentTicks_;
+            currentTicks_ = HighResTimer::GetCurrentTimeInMilliSeconds();
         }
 
         float GetDeltaTime() const
         {
-            return static_cast< float >( m_currentTicks - m_prevTicks ) * MILLISECONDS_TO_SECONDS;	// Conversion to seconds
+            return static_cast< float >( currentTicks_ - prevTicks_ ) * MILLISECONDS_TO_SECONDS;	// Conversion to seconds
         }
 
         unsigned int GetSleepTime( const unsigned int fps )
@@ -67,13 +67,13 @@ namespace  AuxEngine
         // Current time in milliseconds
         int GetCurrentTicks() const
         {
-            return  m_currentTicks;
+            return  currentTicks_;
         }
 
     private:
-        unsigned int m_prevTicks;
-        unsigned int m_currentTicks;
-        unsigned int m_fps;
+        unsigned int prevTicks_;
+        unsigned int currentTicks_;
+        unsigned int fps_;
     };
 }
 

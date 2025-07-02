@@ -42,7 +42,7 @@ namespace AuxEngine
         template<typename T>
         CsvWriter& operator<<(const T& row)
         {
-            (*writer) << row;
+            (*writer_) << row;
             return *this;
         }
 
@@ -54,12 +54,12 @@ namespace AuxEngine
     private:
         using WriterType = csv::CSVWriter<OutputStream, Flush>;
 
-        explicit CsvWriter(std::unique_ptr<WriterType> _writer)
-            : writer(std::move(_writer))
+        explicit CsvWriter(std::unique_ptr<WriterType> writer)
+            : writer_(std::move(writer))
         {
         }
 
-        std::unique_ptr<WriterType> writer;
+        std::unique_ptr<WriterType> writer_;
     };
 }
 

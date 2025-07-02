@@ -7,37 +7,37 @@
 
 namespace  AuxEngine
 {
-	static const std::string EngineConfigFile(std::string(AUXENGINE_CONFIG_DIR) + "AuxEngine.ini");
+	static const std::string engineConfigFile(std::string(AUXENGINE_CONFIG_DIR) + "AuxEngine.ini");
 	
-	static const std::string WindowSection("Window");
-	static const std::string GraphicsSection("Graphics");
+	static const std::string windowSection("Window");
+	static const std::string graphicsSection("Graphics");
 
 	EngineConfig::EngineConfig()
-		: iniParser(std::make_unique<IniParser>())
+		: iniParser_(std::make_unique<IniParser>())
 	{
-		if (!iniParser->LoadFile(EngineConfigFile))
+		if (!iniParser_->LoadFile(engineConfigFile))
 		{
-			DEBUG_LOG(LOG::WARNING, "Failed to open Engine Config file at location: {}", EngineConfigFile);
+			DEBUG_LOG(LOG::WARNING, "Failed to open Engine Config file at location: {}", engineConfigFile);
 		}
 	}
 
 	std::string EngineConfig::GetEngineName() const
 	{
-		return iniParser->GetString(WindowSection, "name");
+		return iniParser_->GetString(windowSection, "name");
 	}
 
 	int EngineConfig::GetWindowWidth() const
 	{
-		return iniParser->GetInteger(WindowSection, "width");
+		return iniParser_->GetInteger(windowSection, "width");
 	}
 
 	int EngineConfig::GetWindowHeight() const
 	{
-		return iniParser->GetInteger(WindowSection, "height");
+		return iniParser_->GetInteger(windowSection, "height");
 	}
 
 	int EngineConfig::GetMaxFPS() const
 	{
-		return iniParser->GetInteger(GraphicsSection, "maxFPS");
+		return iniParser_->GetInteger(graphicsSection, "maxFPS");
 	}
 }

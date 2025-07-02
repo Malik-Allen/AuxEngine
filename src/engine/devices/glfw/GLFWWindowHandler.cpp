@@ -7,7 +7,7 @@
 namespace  AuxEngine
 {
     GLFWWindowHandler::GLFWWindowHandler() :
-        m_window( nullptr )
+        window_( nullptr )
     {}
 
     bool GLFWWindowHandler::InitializeWindow( const int width, const int height, const std::string& name )
@@ -18,23 +18,23 @@ namespace  AuxEngine
         }
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        m_window = glfwCreateWindow( width, height, name.c_str(), nullptr, nullptr );
-        return m_window != nullptr;
+        window_ = glfwCreateWindow( width, height, name.c_str(), nullptr, nullptr );
+        return window_ != nullptr;
     }
 
     bool GLFWWindowHandler::IsWindowOpen() const
     {
-        return m_window != nullptr && !glfwWindowShouldClose( m_window );
+        return window_ != nullptr && !glfwWindowShouldClose( window_ );
     }
 
     void GLFWWindowHandler::ProcessEvents() const
     {
-        if( m_window )
+        if( window_ )
         {
             glfwPollEvents();
-            if( glfwWindowShouldClose( m_window ) )
+            if( glfwWindowShouldClose( window_ ) )
             {
-                glfwDestroyWindow( m_window );
+                glfwDestroyWindow( window_ );
                 glfwTerminate();
             }
         }
@@ -42,16 +42,16 @@ namespace  AuxEngine
 
     void GLFWWindowHandler::Shutdown() const
     {
-        if( m_window )
+        if( window_ )
         {
-            glfwSetWindowShouldClose( m_window, GLFW_TRUE );
-            glfwDestroyWindow( m_window );
+            glfwSetWindowShouldClose( window_, GLFW_TRUE );
+            glfwDestroyWindow( window_ );
         }
         glfwTerminate();
     }
 
     GLFWwindow* GLFWWindowHandler::GetWindow() const
     {
-        return m_window;
+        return window_;
     }
 }

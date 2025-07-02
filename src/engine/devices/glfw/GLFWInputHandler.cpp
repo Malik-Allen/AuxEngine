@@ -49,21 +49,21 @@ namespace  AuxEngine
     }
 
     GLFWInputHandler::GLFWInputHandler() :
-        m_windowHandler( nullptr )
+        windowHandler_( nullptr )
     {}
 
-    bool GLFWInputHandler::Initialize( IWindowHandler* windowHandler )
+    bool GLFWInputHandler::Initialize( WindowHandler* windowHandler )
     {
-        m_windowHandler = static_cast<GLFWWindowHandler*>( windowHandler );
+        windowHandler_ = static_cast<GLFWWindowHandler*>( windowHandler );
 
-        glfwSetKeyCallback(m_windowHandler->m_window, KeyboardCallback);
-        glfwSetMouseButtonCallback(m_windowHandler->m_window, MouseButtonCallback);
-        glfwSetScrollCallback(m_windowHandler->m_window, MouseScrollCallback);
+        glfwSetKeyCallback(windowHandler_->window_, KeyboardCallback);
+        glfwSetMouseButtonCallback(windowHandler_->window_, MouseButtonCallback);
+        glfwSetScrollCallback(windowHandler_->window_, MouseScrollCallback);
         glfwSetJoystickCallback(InputDeviceConnectionCallback);
 
         RefreshConnectedInputDevices();
 
-        return m_windowHandler != nullptr;
+        return windowHandler_ != nullptr;
     }
 
     void GLFWInputHandler::Update(const float deltaTime)
@@ -97,7 +97,7 @@ namespace  AuxEngine
 
     bool GLFWInputHandler::IsKeyDown(Key key) const
     {
-        return m_windowHandler != nullptr && glfwGetKey(m_windowHandler->m_window, static_cast<int>(key)) == GLFW_PRESS;
+        return windowHandler_ != nullptr && glfwGetKey(windowHandler_->window_, static_cast<int>(key)) == GLFW_PRESS;
     }
 
     bool GLFWInputHandler::IsGamepadButtonDown(GamepadId gamepadId, GamepadButton button) const

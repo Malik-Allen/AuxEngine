@@ -31,7 +31,7 @@ namespace  AuxEngine
         int GetMaxFPS() const;
 
     private:
-        std::unique_ptr<IniParser> iniParser;
+        std::unique_ptr<IniParser> iniParser_;
     };
 }
 

@@ -9,7 +9,7 @@ class GLFWwindow;
 
 namespace  AuxEngine
 {
-    class GLFWWindowHandler : public IWindowHandler
+    class GLFWWindowHandler : public WindowHandler
     {
         friend class GLFWInputHandler;
     public:
@@ -29,7 +29,7 @@ namespace  AuxEngine
         GLFWwindow* GetWindow() const;
 
     private:
-        GLFWwindow* m_window;
+        GLFWwindow* window_;
     };
 }
 

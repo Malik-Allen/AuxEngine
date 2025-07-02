@@ -21,7 +21,7 @@ namespace  AuxEngine
         JsonParser& operator=( JsonParser&& ) = delete;
 
         JsonParser() :
-            jsonData(json())
+            jsonData_(json())
         {};
 
         ~JsonParser() {};
@@ -30,7 +30,7 @@ namespace  AuxEngine
         {
             try
             {
-                jsonData = json::parse( jsonString );
+                jsonData_ = json::parse( jsonString );
                 return true;
             }
             catch( json::parse_error& e )
@@ -52,7 +52,7 @@ namespace  AuxEngine
 
             try
             {
-                file >> jsonData;
+                file >> jsonData_;
                 return true;
             }
             catch( json::parse_error& e )
@@ -66,17 +66,17 @@ namespace  AuxEngine
         template <typename T>
         T GetValue( const std::string& key )
         {
-            return jsonData[key].get<T>();
+            return jsonData_[key].get<T>();
         }
 
         // Check if a key exists in the JSON data
         bool Contains( const std::string& key ) const
         {
-            return jsonData.contains( key );
+            return jsonData_.contains( key );
         }
 
     private:
-        json jsonData;
+        json jsonData_;
     };
 }
 

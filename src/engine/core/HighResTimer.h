@@ -40,36 +40,36 @@ namespace  AuxEngine
         HighResTimer& operator=( HighResTimer&& ) = delete;
 
         HighResTimer() :
-            frequency(),
-            currentTicks()
+            frequency_(),
+            currentTicks_()
         {
-            QueryPerformanceFrequency( &frequency );
-            QueryPerformanceCounter( &currentTicks );
+            QueryPerformanceFrequency( &frequency_ );
+            QueryPerformanceCounter( &currentTicks_ );
         }
 
         virtual ~HighResTimer() = default;
 
         unsigned int GetCurrentTimeInMicroSeconds()
         {
-            QueryPerformanceCounter( &currentTicks );			        // Retrieves the current value of the performance counter 'Ticks'
-            currentTicks.QuadPart *= SECONDS_TO_MICROSECONDS;		// Conversion to microseconds to avoid a loss of percision when divinding by frequency
-            currentTicks.QuadPart /= frequency.QuadPart;	        // Division by 'Ticks-per-second'
+            QueryPerformanceCounter( &currentTicks_ );			        // Retrieves the current value of the performance counter 'Ticks'
+            currentTicks_.QuadPart *= SECONDS_TO_MICROSECONDS;		// Conversion to microseconds to avoid a loss of percision when divinding by frequency
+            currentTicks_.QuadPart /= frequency_.QuadPart;	        // Division by 'Ticks-per-second'
 
-            return static_cast< unsigned int >( currentTicks.QuadPart );
+            return static_cast< unsigned int >( currentTicks_.QuadPart );
         }
 
         unsigned int GetCurrentTimeInMilliSeconds()
         {
-            QueryPerformanceCounter( &currentTicks );
-            currentTicks.QuadPart *= SECONDS_TO_MILLISECONDS;
-            currentTicks.QuadPart /= frequency.QuadPart;
+            QueryPerformanceCounter( &currentTicks_ );
+            currentTicks_.QuadPart *= SECONDS_TO_MILLISECONDS;
+            currentTicks_.QuadPart /= frequency_.QuadPart;
 
-            return static_cast< unsigned int >( currentTicks.QuadPart );
+            return static_cast< unsigned int >( currentTicks_.QuadPart );
         }
 
     private:
-        LARGE_INTEGER frequency;	// 'Ticks-per-second' 
-        LARGE_INTEGER currentTicks;
+        LARGE_INTEGER frequency_;	// 'Ticks-per-second' 
+        LARGE_INTEGER currentTicks_;
 
         //**IMPORTANT: LARGE_INTEGER is a union that has member value called 'QuadPart' which stores a 64bit signed int
         // 'QuadPart' should be used for a compiler with support for 64-bit integers, where as 'HighPart' and 'LowPart' should be used otherwise.
