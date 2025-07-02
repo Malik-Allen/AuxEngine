@@ -7,6 +7,7 @@
 #include "../src/engine/core/DebugLog.h"
 #include "../src/engine/core/Engine.h"
 #include "../src/engine/core/EngineClock.h"
+#include "../src/engine/core/FileUtils.h"
 #include "../src/engine/core/Hash.h"
 #include "../src/engine/core/InputHandler.h"
 #include "../src/engine/parsers/CsvReader.h"
