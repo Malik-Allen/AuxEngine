@@ -1,4 +1,4 @@
-// MIT License, Copyright (c) 2024 Malik Allen
+// MIT License, Copyright (c) 2025 Malik Allen
 
 #ifndef AUX_CSVREADER_H
 #define AUX_CSVREADER_H
