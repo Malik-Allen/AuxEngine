@@ -3,14 +3,11 @@
 #ifndef AUX_INIPARSER_H
 #define AUX_INIPARSER_H
 
-#include "inih/cpp/INIReader.h"
+#include "inifile/inifile.h"
 
-#include <fstream>
-#include <iostream>
+typedef ini::inifile Ini;
 
-typedef inih::INIReader ini;
-
-namespace  AuxEngine
+namespace AuxEngine
 {
     class IniParser
     {
@@ -20,88 +17,67 @@ namespace  AuxEngine
         IniParser(IniParser&&) = delete;
         IniParser& operator=(IniParser&&) = delete;
 
-        explicit IniParser(const std::string& fileName):
-            iniReader(ini(fileName))
-        {};
-
+        IniParser() {};
         ~IniParser() {};
 
-        // Load INI data from file.
-        bool ParseFromFile(const std::string& fileName)
+        std::string GetString(const std::string& section, const std::string& key)
         {
-            std::ifstream file(fileName);
-            if (!file.is_open())
-            {
-                std::cerr << "Unable to open file: " << fileName << '\n';
-                return false;
-            }
-
-            iniReader = ini(fileName);
-
-            if (iniReader.ParseError() < 0)
-            {
-                std::cerr << "Unable to read ini file: " << fileName << '\n';
-                return false;
-            }
-
-            return true;
+            return Parser[section][key];
         }
 
-        std::string GetString(const std::string& section, const std::string& name, const std::string& default_value) const
+        int GetInteger(const std::string& section, const std::string& key)
         {
-            return iniReader.GetString(section, name, default_value);
+            return Parser[section][key].as<int>();
         }
 
-        int GetInteger(const std::string& section, const std::string& name, long default_value) const
+        float GetFloat(const std::string& section, const std::string& key)
         {
-            return static_cast<int>(iniReader.GetInteger(section, name, default_value));
+            return Parser[section][key].as<float>();
         }
 
-        float GetFloat(const std::string& section, const std::string& name, double default_value) const
+        bool GetBoolean(const std::string& section, const std::string& key)
         {
-            return static_cast<float>(iniReader.GetReal(section, name, default_value));
-        }
-
-        bool GetBoolean(const std::string& section, const std::string& name, bool default_value) const
-        {
-            return iniReader.GetBoolean(section, name, default_value);
+            return Parser[section][key].as<bool>();
         }
 
         std::vector<std::string> Sections() const
         {
-            return iniReader.Sections();
+            return Parser.sections();
         }
 
-        std::vector<std::string> Keys(const std::string& section) const 
+        std::vector<std::string> Keys(const std::string& section) 
         {
-            return iniReader.Keys(section);
+            return Parser[section].keys();
         }
 
         bool HasSection(const std::string& section) const
         {
-            return iniReader.HasSection(section);
+            return Parser.contains(section);
         }
 
-        bool HasValue(const std::string& section, const std::string& name) const
+        bool HasValue(const std::string& section, const std::string& key)
         {
-            return iniReader.HasValue(section, name);
+            return Parser.contains(section) && Parser[section].contains(key);
         }
 
-        // Returns true if the ini file has been opened. May still have line errors.
-        bool IsOpen() const
+        template <typename T>
+        void Set(const std::string& section, const std::string& key, const T& value)
         {
-            return iniReader.ParseError() >= 0;
+            Parser.set(section, key, value);
         }
 
-        // Return the result of ini_parse(), i.e., 0 on success, line number of
-        // first error on parse error, or -1 on file open error.
-        int ParseError() const
+        bool LoadFile(const std::string& filePath)
         {
-            return iniReader.ParseError();
+            return Parser.load(filePath);
+        }
+
+        bool WriteToFile(const std::string& filePath) const
+        {
+            return Parser.save(filePath);
         }
 
     private:
-        ini iniReader;
+        Ini Parser;
     };
 }
 
