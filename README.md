@@ -24,5 +24,5 @@ AuxEngine is a lightweight and modular development engine + library created to s
 - Game engine or graphics engine development
 - Simulation software
 - CLI tools or GUI applications
-- Desktop Applications
+- Desktop applications
 - Prototyping software
