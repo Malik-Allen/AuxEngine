@@ -103,7 +103,7 @@ namespace AuxEngine
 		return true;
 	}
 
-	bool FileUtils::DuplicateDirectory(const std::string& sourceDirPath, const std::string& destDirPath)
+	bool FileUtils::CopyDirectory(const std::string& sourceDirPath, const std::string& destDirPath)
 	{
 		std::error_code err;
 

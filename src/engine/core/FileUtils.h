@@ -24,7 +24,7 @@ namespace AuxEngine
 		static bool DeleteDirectory(const std::string& dirPath);
 		static std::vector<std::string> GetSubdirectories(const std::string& dirPath);
 		static bool DuplicateFile(const std::string& sourceFilePath, const std::string& destFilePath);
-		static bool DuplicateDirectory(const std::string& sourceDirPath, const std::string& destDirPath);
+		static bool CopyDirectory(const std::string& sourceDirPath, const std::string& destDirPath);
 
 		static std::string to_lowercase(const std::string& in);
 		static std::string to_uppercase(const std::string& in);
