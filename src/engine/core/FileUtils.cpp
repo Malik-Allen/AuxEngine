@@ -47,6 +47,17 @@ namespace AuxEngine
 		return result;
 	}
 
+	bool FileUtils::DeleteDirectory(const std::string& dirPath)
+	{
+		std::error_code err;
+		bool result = std::filesystem::remove_all(dirPath, err);
+		if (err)
+		{
+			DEBUG_LOG(LOG::ERRORLOG, "Failed to remove directory {} ErrMsg:{} ", dirPath, err.message());
+		}
+		return result;
+	}
+
 	std::vector<std::string> FileUtils::GetSubdirectories(const std::string& dirPath)
 	{
 		std::vector<std::string> subDirs;
@@ -144,5 +155,21 @@ namespace AuxEngine
 			}
 		}
 		return true;
+	}
+
+	std::string FileUtils::to_lowercase(const std::string& in)
+	{
+		std::string out = in;
+		std::transform(out.begin(), out.end(), out.begin(),
+			[](unsigned char c) { return std::tolower(c); });
+		return out;
+	}
+
+	std::string FileUtils::to_uppercase(const std::string& in)
+	{
+		std::string out = in;
+		std::transform(out.begin(), out.end(), out.begin(),
+			[](unsigned char c) { return std::toupper(c); });
+		return out;
 	}
 }
