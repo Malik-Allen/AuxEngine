@@ -3,6 +3,8 @@
 #ifndef AUX_ENGINE_H
 #define AUX_ENGINE_H
 
+#include "../src/engine/core/TypeFixMacros.h"
+
 #include "../src/engine/core/App.h"
 #include "../src/engine/core/DebugLog.h"
 #include "../src/engine/core/Engine.h"

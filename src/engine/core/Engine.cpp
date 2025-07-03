@@ -9,8 +9,10 @@
 #include "engine/devices/GLFW/GLFWInputHandler.h"
 #include "engine/devices/GLFW/GLFWWindowHandler.h"
 
+#include <chrono>
 #include <fstream>
 #include <string>
+#include <thread>
 
 namespace  AuxEngine
 {
@@ -120,14 +122,14 @@ namespace  AuxEngine
 
     void Engine::Run()
     {
-        while( isRunning_ )
+        while(isRunning_)
         {
             clock_->UpdateFrameTicks();
-            Update( clock_->GetDeltaTime() );
-            Sleep( clock_->GetSleepTime( clock_->GetFPS() ) );    // TODO: Not optimal and should be replaced with a better sleep function
+            Update(clock_->GetDeltaTime());
+            std::this_thread::sleep_for(std::chrono::milliseconds(clock_->GetSleepTime(clock_->GetFPS()))); // TODO: Replace sleep with Busy-Wait.
         }
 
-        if( !isRunning_ )
+        if(!isRunning_)
         {
             Shutdown();
         }
