@@ -2,7 +2,8 @@
 
 #include "FileUtils.h"
 
-#include "DebugLog.h"
+#include "engine/core/DebugLog.h"
+#include "engine/parsers/CsvWriter.h"
 
 #include <filesystem>
 #include <fstream>
@@ -193,5 +194,33 @@ namespace AuxEngine
 		std::transform(out.begin(), out.end(), out.begin(),
 			[](unsigned char c) { return std::toupper(c); });
 		return out;
+	}
+
+	bool FileUtils::CreateCsvFile(const std::string& filePath, const std::vector<std::string>& headers)
+	{
+		if (!headers.empty())
+		{
+			DEBUG_LOG(LOG::ERRORLOG, "Failed to create csv file {} ErrMsg: Headers are empty!", filePath);
+			return false;
+		}
+
+		if (!CreateFileAtPath(filePath))
+		{
+			DEBUG_LOG(LOG::ERRORLOG, "Failed to create csv file {}", filePath);
+			return false;
+		}
+
+		// Open output file stream
+		std::ofstream file(filePath);
+		if (!file.is_open()) 
+		{
+			DEBUG_LOG(LOG::ERRORLOG, "Failed to create csv file. Could not write headers {}", filePath);
+			return false;
+		}
+
+		auto writer = AuxEngine::CsvWriter<std::ofstream, true>::FromCsv(file);
+		writer << headers;
+		file.close();
+		return true;
 	}
 }
