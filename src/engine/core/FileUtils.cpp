@@ -199,7 +199,7 @@ namespace AuxEngine
 
 	bool FileUtils::CreateIniFile(const std::string& filePath, const std::vector<std::string>& sections)
 	{
-		if (!sections.empty())
+		if (sections.empty())
 		{
 			DEBUG_LOG(LOG::ERRORLOG, "Failed to create ini file {} ErrMsg: Sections are empty!", filePath);
 			return false;
@@ -228,7 +228,7 @@ namespace AuxEngine
 
 	bool FileUtils::CreateCsvFile(const std::string& filePath, const std::vector<std::string>& headers)
 	{
-		if (!headers.empty())
+		if (headers.empty())
 		{
 			DEBUG_LOG(LOG::ERRORLOG, "Failed to create csv file {} ErrMsg: Headers are empty!", filePath);
 			return false;
