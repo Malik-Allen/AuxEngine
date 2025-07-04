@@ -157,6 +157,28 @@ namespace AuxEngine
 		return true;
 	}
 
+	bool FileUtils::GetLastWriteTimestamp(const std::string& _path, std::string& outTimeStamp)
+	{
+		std::filesystem::path path(_path);
+
+		if (!std::filesystem::exists(path)) 
+		{
+			DEBUG_LOG(LOG::ERRORLOG, "Failed to get last write timestamp. No path exists at {}", path.string());
+			return false;
+		}
+
+		auto fileTime = std::filesystem::last_write_time(path);
+
+		// Convert to system_clock time_point
+		auto timePoint = std::chrono::clock_cast<std::chrono::system_clock>(fileTime);
+		const std::time_t time = std::chrono::system_clock::to_time_t(timePoint);
+
+		std::ostringstream oss;
+		oss << std::put_time(std::localtime(&time), "%d-%m-%Y %H:%M");
+		outTimeStamp = oss.str();
+		return true;
+	}
+
 	std::string FileUtils::to_lowercase(const std::string& in)
 	{
 		std::string out = in;
