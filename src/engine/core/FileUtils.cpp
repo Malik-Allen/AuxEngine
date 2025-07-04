@@ -11,6 +11,9 @@
 
 namespace AuxEngine
 {
+	static const std::string IniExt(".ini");
+	static const std::string CsvExt(".csv");
+
 	bool FileUtils::CreateFileAtPath(const std::string& filePath)
 	{
 		std::filesystem::path path(filePath);
@@ -197,8 +200,28 @@ namespace AuxEngine
 		return out;
 	}
 
+	bool FileUtils::has_extension(const std::string& filePath, const std::string& _ext)
+	{
+		std::filesystem::path path(filePath);
+		std::string ext = to_lowercase(path.extension().string());
+
+		std::string targetExt = to_lowercase(_ext);
+		if (!targetExt.empty() && targetExt[0] != '.') 
+		{
+			targetExt = '.' + targetExt;
+		}
+
+		return ext == targetExt;
+	}
+
 	bool FileUtils::CreateIniFile(const std::string& filePath, const std::vector<std::string>& sections)
 	{
+		if (!has_extension(filePath, IniExt))
+		{
+			DEBUG_LOG(LOG::ERRORLOG, "Failed to create ini file {} ErrMsg: File does not have ext: {}!", filePath, IniExt);
+			return false;
+		}
+
 		if (sections.empty())
 		{
 			DEBUG_LOG(LOG::ERRORLOG, "Failed to create ini file {} ErrMsg: Sections are empty!", filePath);
@@ -228,6 +251,12 @@ namespace AuxEngine
 
 	bool FileUtils::CreateCsvFile(const std::string& filePath, const std::vector<std::string>& headers)
 	{
+		if (!has_extension(filePath, CsvExt))
+		{
+			DEBUG_LOG(LOG::ERRORLOG, "Failed to create csv file {} ErrMsg: File does not have ext: {}!", filePath, CsvExt);
+			return false;
+		}
+
 		if (headers.empty())
 		{
 			DEBUG_LOG(LOG::ERRORLOG, "Failed to create csv file {} ErrMsg: Headers are empty!", filePath);
