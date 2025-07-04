@@ -30,6 +30,7 @@ namespace AuxEngine
 		static std::string to_lowercase(const std::string& in);
 		static std::string to_uppercase(const std::string& in);
 
+		static bool CreateIniFile(const std::string& filePath, const std::vector<std::string>& sections);
 		static bool CreateCsvFile(const std::string& filePath, const std::vector<std::string>& headers);
 	};
 }

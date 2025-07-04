@@ -66,6 +66,11 @@ namespace AuxEngine
             parser_.set(section, key, value);
         }
 
+        void AddSection(const std::string& section)
+        {
+            parser_[section];
+        }
+
         bool LoadFile(const std::string& filePath)
         {
             return parser_.load(filePath);

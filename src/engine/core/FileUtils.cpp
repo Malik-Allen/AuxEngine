@@ -4,6 +4,7 @@
 
 #include "engine/core/DebugLog.h"
 #include "engine/parsers/CsvWriter.h"
+#include "engine/parsers/IniParser.h"
 
 #include <filesystem>
 #include <fstream>
@@ -194,6 +195,35 @@ namespace AuxEngine
 		std::transform(out.begin(), out.end(), out.begin(),
 			[](unsigned char c) { return std::toupper(c); });
 		return out;
+	}
+
+	bool FileUtils::CreateIniFile(const std::string& filePath, const std::vector<std::string>& sections)
+	{
+		if (!sections.empty())
+		{
+			DEBUG_LOG(LOG::ERRORLOG, "Failed to create ini file {} ErrMsg: Sections are empty!", filePath);
+			return false;
+		}
+
+		if (!CreateFileAtPath(filePath))
+		{
+			DEBUG_LOG(LOG::ERRORLOG, "Failed to create ini file {}", filePath);
+			return false;
+		}
+
+		IniParser parser;
+		for (const auto& sec : sections)
+		{
+			parser.AddSection(sec);
+		}
+
+		if (!parser.WriteToFile(filePath))
+		{
+			DEBUG_LOG(LOG::ERRORLOG, "Failed to save sections to ini file {}", filePath);
+			return false;
+		}
+
+		return true;
 	}
 
 	bool FileUtils::CreateCsvFile(const std::string& filePath, const std::vector<std::string>& headers)
