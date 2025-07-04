@@ -174,7 +174,7 @@ namespace AuxEngine
 		const std::time_t time = std::chrono::system_clock::to_time_t(timePoint);
 
 		std::ostringstream oss;
-		oss << std::put_time(std::localtime(&time), "%Y-%m-%d | %H:%M");
+		oss << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
 		outTimeStamp = oss.str();
 		return true;
 	}
