@@ -9,10 +9,12 @@
 
 namespace AuxEngine
 {
+    using CsvFormat = csv::CSVFormat;
+    using CsvRow = csv::CSVRow;
+
     class CsvReader
     {
     public:
-        using RowType = csv::CSVRow;
         using Iterator = csv::CSVReader::iterator;
 
         CsvReader(const CsvReader&) = delete;
@@ -24,12 +26,13 @@ namespace AuxEngine
             : reader_(filePath)
         {}
 
-        CsvReader(const std::string& filePath, const csv::CSVFormat& format)
+        CsvReader(const std::string& filePath, const CsvFormat& format)
             : reader_(filePath, format)
         {}
 
         Iterator begin() { return reader_.begin(); }
         Iterator end() { return reader_.end(); }
+        std::vector<std::string> get_col_names() const { return reader_.get_col_names(); }
 
     private:
         csv::CSVReader reader_;
