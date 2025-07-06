@@ -235,6 +235,8 @@ namespace AuxEngine
 		}
 
 		IniParser parser;
+		parser.LoadFile(filePath);	// If the exists, load all of its existing data, not to lose it.
+
 		for (const auto& sec : sections)
 		{
 			parser.AddSection(sec);
