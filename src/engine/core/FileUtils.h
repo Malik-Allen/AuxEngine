@@ -33,6 +33,8 @@ namespace AuxEngine
 
 		static bool CreateIniFile(const std::string& filePath, const std::vector<std::string>& sections);
 		static bool CreateCsvFile(const std::string& filePath, const std::vector<std::string>& headers);
+
+		static std::string GetExecutableDirectory();
 	};
 }
 
