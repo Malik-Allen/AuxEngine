@@ -234,15 +234,15 @@ namespace AuxEngine
 			return false;
 		}
 
-		IniParser parser;
-		parser.LoadFile(filePath);	// If the exists, load all of its existing data, not to lose it.
+		IniParser parser(filePath);
+		parser.Read();	// If the exists, load all of its existing data, not to lose it.
 
 		for (const auto& sec : sections)
 		{
 			parser.AddSection(sec);
 		}
 
-		if (!parser.WriteToFile(filePath))
+		if (!parser.Write())
 		{
 			DEBUG_LOG(LOG::ERRORLOG, "Failed to save sections to ini file {}", filePath);
 			return false;

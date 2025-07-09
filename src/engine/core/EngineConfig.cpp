@@ -3,19 +3,20 @@
 #include "engine/core/EngineConfig.h"
 
 #include "engine/core/DebugLog.h"
+#include "engine/core/FileUtils.h"
 #include "engine/parsers/IniParser.h"
 
 namespace  AuxEngine
 {
-	static const std::string engineConfigFile(std::string(AUXENGINE_CONFIG_DIR) + "AuxEngine.ini");
+	static const std::string engineConfigFile(FileUtils::GetExecutableDirectory() + "/config/AuxEngine.ini");
 	
 	static const std::string windowSection("Window");
 	static const std::string graphicsSection("Graphics");
 
 	EngineConfig::EngineConfig()
-		: iniParser_(std::make_unique<IniParser>())
+		: iniParser_(std::make_unique<IniParser>(engineConfigFile))
 	{
-		if (!iniParser_->LoadFile(engineConfigFile))
+		if (!iniParser_->Read())
 		{
 			DEBUG_LOG(LOG::WARNING, "Failed to open Engine Config file at location: {}", engineConfigFile);
 		}

@@ -3,9 +3,10 @@
 #ifndef AUX_INIPARSER_H
 #define AUX_INIPARSER_H
 
-#include "inifile/inifile.h"
+#include "mini/ini.h"
 
-typedef ini::inifile Ini;
+typedef mINI::INIFile Ini;
+typedef mINI::INIStructure IniData;
 
 namespace AuxEngine
 {
@@ -17,72 +18,82 @@ namespace AuxEngine
         IniParser(IniParser&&) = delete;
         IniParser& operator=(IniParser&&) = delete;
 
-        IniParser() {};
+        explicit IniParser(const std::string& filePath) 
+            : file_(filePath)
+        {};
+
         ~IniParser() {};
 
         std::string GetString(const std::string& section, const std::string& key)
         {
-            return parser_[section][key];
+            return data_[section][key];
         }
 
         int GetInteger(const std::string& section, const std::string& key)
         {
-            return parser_[section][key].as<int>();
+            return std::stoi(data_[section][key]);
         }
 
         float GetFloat(const std::string& section, const std::string& key)
         {
-            return parser_[section][key].as<float>();
+            return std::stof(data_[section][key]);
         }
 
         bool GetBoolean(const std::string& section, const std::string& key)
         {
-            return parser_[section][key].as<bool>();
+            std::string value = data_[section][key];
+            std::transform(value.begin(), value.end(), value.begin(), ::tolower); // make lowercase
+            return (value == "true" || value == "1" || value == "yes" || value == "on");
         }
 
         std::vector<std::string> Sections() const
         {
-            return parser_.sections();
+            std::vector<std::string> sections;
+            for (const auto& pair : data_)
+            {
+                sections.push_back(pair.first);
+            }
+            return sections;
         }
 
         std::vector<std::string> Keys(const std::string& section) 
         {
-            return parser_[section].keys();
+            std::vector<std::string> keys;
+            for (const auto& pair : data_[section])
+            {
+                keys.push_back(pair.second);
+            }
+            return keys;
         }
 
         bool HasSection(const std::string& section) const
         {
-            return parser_.contains(section);
+            return data_.has(section);
         }
 
         bool HasValue(const std::string& section, const std::string& key)
         {
-            return parser_.contains(section) && parser_[section].contains(key);
-        }
-
-        template <typename T>
-        void Set(const std::string& section, const std::string& key, const T& value)
-        {
-            parser_.set(section, key, value);
+            return data_.has(section) && data_[section].has(key);
         }
 
         void AddSection(const std::string& section)
         {
-            parser_[section];
+            data_[section];
         }
 
-        bool LoadFile(const std::string& filePath)
+        bool Read()
         {
-            return parser_.load(filePath);
+            return file_.read(data_);
         }
 
-        bool WriteToFile(const std::string& filePath) const
+        bool Write()
         {
-            return parser_.save(filePath);
+            return file_.write(data_);
         }
 
     private:
-        Ini parser_;
+        Ini file_;
+        IniData data_;
     };
 }
 
