@@ -29,14 +29,39 @@ namespace AuxEngine
             return data_[section][key];
         }
 
-        int GetInteger(const std::string& section, const std::string& key)
+        int GetInteger(const std::string& section, const std::string& key, int defaultValue = 0)
         {
-            return std::stoi(data_[section][key]);
+            if (!data_[section][key].empty())
+            {
+                return std::stoi(data_[section][key]);
+            }
+            else
+            {
+                return defaultValue;
+            }
         }
 
-        float GetFloat(const std::string& section, const std::string& key)
+        float GetFloat(const std::string& section, const std::string& key, float defaultValue = 0.0f)
         {
-            return std::stof(data_[section][key]);
+            if (!data_[section][key].empty())
+            {
+                return std::stof(data_[section][key]);
+            }
+            else
+            {
+                return defaultValue;
+            }
+        }
+        float GetDouble(const std::string& section, const std::string& key, float defaultValue = 0.0)
+        {
+            if (!data_[section][key].empty())
+            {
+                return std::stod(data_[section][key]);
+            }
+            else
+            {
+                return defaultValue;
+            }
         }
 
         bool GetBoolean(const std::string& section, const std::string& key)
@@ -79,6 +104,11 @@ namespace AuxEngine
         void AddSection(const std::string& section)
         {
             data_[section];
+        }
+
+        void Set(const std::string& section, const std::string& key, const std::string& value)
+        {
+            data_[section][key] = value;
         }
 
         bool Read()
