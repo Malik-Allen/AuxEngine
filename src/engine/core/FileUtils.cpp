@@ -29,8 +29,7 @@ namespace AuxEngine
 	bool FileUtils::DoesFileExist(const std::string& filePath)
 	{
 		std::filesystem::path path(filePath);
-		std::ofstream file(path, std::ios::app);
-		return file.is_open();
+		return std::filesystem::exists(filePath);
 	}
 
 	bool FileUtils::CreateFileAtPath(const std::string& filePath)
