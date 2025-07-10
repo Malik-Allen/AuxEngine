@@ -9,7 +9,6 @@
 namespace  AuxEngine
 {
 	static const std::string ConfigFileName("config/AuxEngine.ini");
-	static const std::string EngineSection("Engine");
 	static const std::string WindowSection("Window");
 	static const std::string GraphicsSection("Graphics");
 
@@ -17,19 +16,14 @@ namespace  AuxEngine
 		: iniParser_("")
 	{
 		const std::string configFile = outputDir + ConfigFileName;
-		FileUtils::CreateIniFile(configFile, { EngineSection, WindowSection, GraphicsSection });
+		FileUtils::CreateIniFile(configFile, { WindowSection, GraphicsSection });
 		iniParser_ = IniParser(configFile);
 		iniParser_.Read();
 	}
 
-	bool EngineConfig::CanTick()
-	{
-		return iniParser_.GetBoolean(EngineSection, "tickEnabled", true);
-	}
-
 	std::string EngineConfig::GetEngineName()
 	{
-		return iniParser_.GetString(WindowSection, "name", "DefaultEngineName");
+		return iniParser_.GetString(WindowSection, "name", "AuxEngine");
 	}
 
 	int EngineConfig::GetWindowWidth()

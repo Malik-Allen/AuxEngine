@@ -19,9 +19,6 @@ namespace  AuxEngine
         explicit EngineConfig(const std::string& outputDir);
         ~EngineConfig() = default;
 
-        // Engine settings
-        bool CanTick();
-
         // Window settings
         std::string GetEngineName();
         int GetWindowWidth();

@@ -50,7 +50,7 @@ namespace  AuxEngine
 )";
 
     Engine::Engine() :
-        canTick_(true),
+        mode_(Mode::Standalone),
         isRunning_(false),
         config_(nullptr),
         clock_(std::make_unique<EngineClock>()),
@@ -79,18 +79,25 @@ namespace  AuxEngine
         }
     }
 
-    void Engine::Start(const char* outputDir)
+    bool Engine::IsStandalone() const
+    {
+        return mode_ == Mode::Standalone;
+    }
+
+    void Engine::Start(Mode mode, const char* outputDir)
     {
         DEBUG_INIT(outputDir, AsciiLogoRaw);
         DEBUG_LOG(LOG::INFO, "Waking up...");
 
+        mode_ = mode;
         isRunning_ = false;
 
-        config_ = std::make_unique<EngineConfig>(outputDir);
-        canTick_ = config_->CanTick();
-
-        if (canTick_)
+        if (mode_ == Mode::Standalone)
         {
+            DEBUG_LOG(LOG::INFO, "Standalone mode activated. Please standby.");
+
+            config_ = std::make_unique<EngineConfig>(outputDir);
+
             clock_->SetFPS(config_->GetMaxFPS());
 
             windowHandler_ = std::make_unique<GLFWWindowHandler>();
@@ -103,6 +110,11 @@ namespace  AuxEngine
             {
                 return;
             }
+        }
+        else 
+        {
+            DEBUG_LOG(LOG::INFO, "Auxiliary mode activated. Please standby.");
+            // Auxiliary Mode, do nothing.
         }
 
         isRunning_ = true;
@@ -122,7 +134,7 @@ namespace  AuxEngine
 
     void Engine::Run()
     {
-        if (canTick_)
+        if (mode_ == Mode::Standalone)
         {
             while (isRunning_)
             {

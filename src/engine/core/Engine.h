@@ -13,6 +13,12 @@ namespace AuxEngine
     class InputHandler;
     class App;
 
+    enum Mode 
+    {
+        Standalone = 0,
+        Auxiliary
+    };
+
     class Engine : public Singleton<Engine>
     {
         friend class Singleton;
@@ -26,8 +32,10 @@ namespace AuxEngine
         Engine& operator = (Engine&&) = delete;
         ~Engine() override;
 
+        
+
     private:
-        bool canTick_;
+        Mode mode_;
         bool isRunning_;
         std::unique_ptr<EngineConfig> config_;
         std::unique_ptr<EngineClock> clock_;
@@ -36,12 +44,12 @@ namespace AuxEngine
         std::unique_ptr<App> app_;
 
         void Update(const float deltaTime);
+        bool IsStandalone() const;
 
     public:
-        void Start(const char* outputDir = "");
+        void Start(Mode mode, const char* outputDir = "");
         bool LoadApp(App* app);
         void Run();
-        bool CanTick() const { return canTick_; }
         bool IsRunning() const { return isRunning_; }
         void Shutdown();
 
