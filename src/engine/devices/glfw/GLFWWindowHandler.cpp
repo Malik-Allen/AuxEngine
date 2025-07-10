@@ -1,6 +1,7 @@
 ﻿// MIT License, Copyright (c) 2024 Malik Allen
 
 #include "engine/devices/glfw/GLFWWindowHandler.h"
+#include "engine/core/DebugLog.h"
 
 #include <GLFW/glfw3.h>
 
@@ -12,14 +13,20 @@ namespace  AuxEngine
 
     bool GLFWWindowHandler::InitializeWindow( const int width, const int height, const std::string& name )
     {
-        if( !glfwInit() )
+        if(!glfwInit())
         {
+            DEBUG_LOG(LOG::ERRORLOG, "Failed to initialize GLFW!");
             return false;
         }
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         window_ = glfwCreateWindow( width, height, name.c_str(), nullptr, nullptr );
-        return window_ != nullptr;
+        if (!window_)
+        {
+            DEBUG_LOG(LOG::ERRORLOG, "Failed to GLFW Window! Window properties: width:{} height:{} name:{}", width, height, name);
+            return false;
+        }
+        return true;
     }
 
     bool GLFWWindowHandler::IsWindowOpen() const

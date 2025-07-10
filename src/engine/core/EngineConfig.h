@@ -3,35 +3,35 @@
 #ifndef AUX_ENGINECONFIG
 #define AUX_ENGINECONFIG
 
-#include "engine/core/Singleton.h"
+#include "engine/parsers/IniParser.h"
 
 #include <string>
 
 namespace  AuxEngine
 {
-    class IniParser;
-
-    class EngineConfig : public Singleton<EngineConfig>
+    class EngineConfig
     {
-    public:
         EngineConfig(const EngineConfig&) = delete;
-        EngineConfig& operator=(const EngineConfig&) = delete;
         EngineConfig(EngineConfig&&) = delete;
+        EngineConfig& operator=(const EngineConfig&) = delete;
         EngineConfig& operator=(EngineConfig&&) = delete;
+    public:
+        explicit EngineConfig(const std::string& outputDir);
+        ~EngineConfig() = default;
 
-        EngineConfig();
-        ~EngineConfig() override = default;
+        // Engine settings
+        bool CanTick();
 
         // Window settings
-        std::string GetEngineName() const;
-        int GetWindowWidth() const;
-        int GetWindowHeight() const;
+        std::string GetEngineName();
+        int GetWindowWidth();
+        int GetWindowHeight();
 
         // Graphics settings
-        int GetMaxFPS() const;
+        int GetMaxFPS();
 
     private:
-        std::unique_ptr<IniParser> iniParser_;
+        IniParser iniParser_;
     };
 }
 

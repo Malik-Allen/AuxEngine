@@ -13,20 +13,55 @@ namespace AuxEngine
     class IniParser
     {
     public:
-        IniParser(const IniParser&) = delete;
-        IniParser& operator=(const IniParser&) = delete;
-        IniParser(IniParser&&) = delete;
-        IniParser& operator=(IniParser&&) = delete;
-
-        explicit IniParser(const std::string& filePath) 
+        explicit IniParser(const std::string& filePath)
             : file_(filePath)
         {};
 
+        IniParser(const IniParser& other)
+            : file_(other.file_)
+            , data_(other.data_)
+        {};
+
+        IniParser(IniParser&& other) noexcept
+            : file_(other.file_)
+            , data_(other.data_)
+        {
+            other.file_ = Ini("");
+            other.data_ = IniData();
+        };
+
+        IniParser& operator=(const IniParser& other)
+        {
+            file_ = other.file_;
+            data_ = other.data_;
+            return *this;
+        };
+
+        IniParser& operator=(IniParser&& other) noexcept
+        {
+            if (this != &other)
+            {
+                file_ = other.file_;
+                data_ = other.data_;
+
+                other.file_ = Ini("");
+                other.data_ = IniData();
+            }
+            return *this;
+        };
+
         ~IniParser() {};
 
-        std::string GetString(const std::string& section, const std::string& key)
+        std::string GetString(const std::string& section, const std::string& key, const std::string& defaultValue = "")
         {
-            return data_[section][key];
+            if (!data_[section][key].empty())
+            {
+                return data_[section][key];
+            }
+            else
+            {
+                return defaultValue;
+            }
         }
 
         int GetInteger(const std::string& section, const std::string& key, int defaultValue = 0)
@@ -64,9 +99,13 @@ namespace AuxEngine
             }
         }
 
-        bool GetBoolean(const std::string& section, const std::string& key)
+        bool GetBoolean(const std::string& section, const std::string& key, bool defaultValue = false)
         {
             std::string value = data_[section][key];
+            if (value.empty())
+            {
+                return defaultValue;
+            }
             std::transform(value.begin(), value.end(), value.begin(), ::tolower); // make lowercase
             return (value == "true" || value == "1" || value == "yes" || value == "on");
         }

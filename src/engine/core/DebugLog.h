@@ -3,10 +3,11 @@
 #ifndef AUX_DEBUGLOG_H
 #define AUX_DEBUGLOG_H
 
+#include <filesystem>
 #include <format>
-#include <string>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <string>
 
 enum class LOG : unsigned short
 {
@@ -32,9 +33,8 @@ constexpr static const char* ToString( LOG logType )
 	}
 }
 
-#if _DEBUG == 1	// ON
-	/* Creates brand new output file for logging. With an initial message for the output file. */
-#define DEBUG_INIT(InitMessage) ( AuxEngine::DebugLog::DebugLogInit(InitMessage) )
+	/* Creates brand new output file inside ofthe passed output directory. With an initial message for the output file. */
+#define DEBUG_INIT(outputDir, initMessage) ( AuxEngine::DebugLog::DebugLogInit(outputDir, initMessage) )
 
 /* Logs error to output log */
 #define OUTPUT_FILE_LOG( LogType, Message, ... ) ( AuxEngine::DebugLog::OutputFile_Log( LogType, Message, __FILE__, __FUNCTION__, __LINE__, __VA_ARGS__ ) )
@@ -44,22 +44,6 @@ constexpr static const char* ToString( LOG logType )
 
 /* Prints message to Output File and Console */
 #define DEBUG_LOG( LogType, Message, ... ) ( OUTPUT_FILE_LOG(LogType, Message, __VA_ARGS__ ), CONSOLE_LOG(LogType, Message, __VA_ARGS__ ) )
-
-#else	// OFF
-
-	/* Creates brand new output file for logging */
-#define DEBUG_INIT(InitMessage)
-
-/* Logs error to output log */
-#define OUTPUT_FILE_LOG( LogType, Message )
-
-/* Will print to console log */
-#define CONSOLE_LOG( LogType, Message ) 
-
-/* Prints message to Output File and Console */
-#define DEBUG_LOG( LogType, Message, ... )
-
-#endif
 
 
 namespace AuxEngine
@@ -76,15 +60,27 @@ namespace AuxEngine
 		DebugLog(DebugLog&&) = delete;
 		DebugLog& operator=(DebugLog&&) = delete;
 
-		static void DebugLogInit(const std::string& initMessage = "")
+		static void DebugLogInit(const std::string& outputDir_ = "", const std::string& initMessage_ = "")
 		{
+			outputFilePath = outputDir_ + outputFileName;
+
+			std::filesystem::path path(outputFilePath);
+			if (path.has_parent_path())
+			{
+				std::filesystem::create_directories(path.parent_path());	// Ensure parent directories exist.
+			}
+
 			std::ofstream outputFile;
-			outputFile.open(outputLogFileName_, std::ios::out);	// We create the file using out just to make sure it is there and clears it
-			outputFile << initMessage << std::endl;
+			outputFile.open(outputFilePath, std::ios::out);	// We create the file using out just to make sure it is there and clears it
+			if (!outputFile)
+			{
+				return;
+			}
+			outputFile << initMessage_ << std::endl;
 			outputFile.flush();
 			outputFile.close();
 
-			std::cout << initMessage << std::endl;
+			std::cout << initMessage_ << std::endl;
 		}
 
 		template<typename ... Args>
@@ -96,8 +92,11 @@ namespace AuxEngine
 			Args&& ... args)
 		{
 			std::ofstream outputFile;
-			outputFile.open(outputLogFileName_, std::ios::app | std::ios::out);
-
+			outputFile.open(outputFilePath, std::ios::app | std::ios::out);
+			if (!outputFile)
+			{
+				return;
+			}
 			/*[05/15/22|21:33:51][INFO]:	FunctionName(00):	Message {}*/
 			std::string output;
 			output.append(BuildTimeStamp());
@@ -139,7 +138,8 @@ namespace AuxEngine
 		};
 
 	private:
-		inline static std::string outputLogFileName_ = "Output-Log.txt";
+		inline static std::string outputFilePath = "";
+		inline static std::string outputFileName = "Output-Log.txt";
 
 		/* Returns a string in the format: [05/15/22|21:33:51]*/
 		static std::string BuildTimeStamp()

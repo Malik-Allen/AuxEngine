@@ -8,37 +8,42 @@
 
 namespace  AuxEngine
 {
-	static const std::string engineConfigFile(FileUtils::GetExecutableDirectory() + "/config/AuxEngine.ini");
-	
-	static const std::string windowSection("Window");
-	static const std::string graphicsSection("Graphics");
+	static const std::string ConfigFileName("config/AuxEngine.ini");
+	static const std::string EngineSection("Engine");
+	static const std::string WindowSection("Window");
+	static const std::string GraphicsSection("Graphics");
 
-	EngineConfig::EngineConfig()
-		: iniParser_(std::make_unique<IniParser>(engineConfigFile))
+	EngineConfig::EngineConfig(const std::string& outputDir)
+		: iniParser_("")
 	{
-		if (!iniParser_->Read())
-		{
-			DEBUG_LOG(LOG::WARNING, "Failed to open Engine Config file at location: {}", engineConfigFile);
-		}
+		const std::string configFile = outputDir + ConfigFileName;
+		FileUtils::CreateIniFile(configFile, { EngineSection, WindowSection, GraphicsSection });
+		iniParser_ = IniParser(configFile);
+		iniParser_.Read();
 	}
 
-	std::string EngineConfig::GetEngineName() const
+	bool EngineConfig::CanTick()
 	{
-		return iniParser_->GetString(windowSection, "name");
+		return iniParser_.GetBoolean(EngineSection, "tickEnabled", true);
 	}
 
-	int EngineConfig::GetWindowWidth() const
+	std::string EngineConfig::GetEngineName()
 	{
-		return iniParser_->GetInteger(windowSection, "width");
+		return iniParser_.GetString(WindowSection, "name", "DefaultEngineName");
 	}
 
-	int EngineConfig::GetWindowHeight() const
+	int EngineConfig::GetWindowWidth()
 	{
-		return iniParser_->GetInteger(windowSection, "height");
+		return iniParser_.GetInteger(WindowSection, "width", 256);
 	}
 
-	int EngineConfig::GetMaxFPS() const
+	int EngineConfig::GetWindowHeight()
 	{
-		return iniParser_->GetInteger(graphicsSection, "maxFPS");
+		return iniParser_.GetInteger(WindowSection, "height", 256);
+	}
+
+	int EngineConfig::GetMaxFPS()
+	{
+		return iniParser_.GetInteger(GraphicsSection, "maxFPS", 30);
 	}
 }

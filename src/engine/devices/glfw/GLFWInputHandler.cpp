@@ -3,9 +3,9 @@
 #include "engine/devices/glfw/GLFWInputHandler.h"
 #include "engine/devices/glfw/GLFWWindowHandler.h"
 
+#include "engine/core/DebugLog.h"
 #include "engine/core/Engine.h"
 #include "engine/core/EngineClock.h"
-#include "engine/core/DebugLog.h"
 
 #include <GLFW/glfw3.h>
 
@@ -55,6 +55,11 @@ namespace  AuxEngine
     bool GLFWInputHandler::Initialize( WindowHandler* windowHandler )
     {
         windowHandler_ = static_cast<GLFWWindowHandler*>( windowHandler );
+        if (!windowHandler_)
+        {
+            DEBUG_LOG(LOG::ERRORLOG, "Failed to init GLFW Input Handler! GLFW Window handler is NULL!");
+            return false;
+        }
 
         glfwSetKeyCallback(windowHandler_->window_, KeyboardCallback);
         glfwSetMouseButtonCallback(windowHandler_->window_, MouseButtonCallback);

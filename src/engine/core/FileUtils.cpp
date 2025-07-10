@@ -9,10 +9,29 @@
 #include <filesystem>
 #include <fstream>
 
+#ifdef _WIN32
+#include <windows.h>
+#include <shlobj.h>  // SHGetKnownFolderPath
+#pragma comment(lib, "Shell32.lib")
+#pragma comment(lib, "Ole32.lib")
+#elif __APPLE__
+#include <mach-o/dyld.h>
+#else // Linux
+#include <unistd.h>
+#endif
+
 namespace AuxEngine
 {
 	static const std::string IniExt(".ini");
 	static const std::string CsvExt(".csv");
+	static const std::string TxtExt(".txt");
+
+	bool FileUtils::DoesFileExist(const std::string& filePath)
+	{
+		std::filesystem::path path(filePath);
+		std::ofstream file(path, std::ios::app);
+		return file.is_open();
+	}
 
 	bool FileUtils::CreateFileAtPath(const std::string& filePath)
 	{
@@ -286,14 +305,12 @@ namespace AuxEngine
 	}
 
 #ifdef _WIN32
-#include <windows.h>
 	std::string FileUtils::GetExecutableDirectory() {
 		char path[MAX_PATH];
 		GetModuleFileNameA(NULL, path, MAX_PATH);
 		return std::filesystem::path(path).parent_path().string();
 	}
 #elif __APPLE__
-#include <mach-o/dyld.h>
 	std::string FileUtils::GetExecutableDirectory() {
 		char path[1024];
 		uint32_t size = sizeof(path);
@@ -303,7 +320,6 @@ namespace AuxEngine
 			return {};
 	}
 #else // Linux
-#include <unistd.h>
 	std::string FileUtils::GetExecutableDirectory() {
 		char result[1024];
 		ssize_t count = readlink("/proc/self/exe", result, sizeof(result));
@@ -311,4 +327,35 @@ namespace AuxEngine
 	}
 #endif
 
+	std::string FileUtils::GetLocalAppDataDirectory(const std::string& appName)
+	{
+		std::string path;
+#ifdef _WIN32
+		PWSTR widePath = nullptr;
+		if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &widePath))) {
+			char ansiPath[MAX_PATH];
+			wcstombs(ansiPath, widePath, MAX_PATH);
+			path = ansiPath;
+			CoTaskMemFree(widePath);
+		}
+#elif __APPLE__
+		const char* home = getenv("HOME");
+		if (home)
+			path = std::string(home) + "/Library/Application Support";
+#else // Linux
+		const char* xdg = getenv("XDG_DATA_HOME");
+		if (xdg)
+			path = xdg;
+		else {
+			const char* home = getenv("HOME");
+			if (home)
+				path = std::string(home) + "/.local/share";
+		}
+#endif
+		if (!path.empty() && !appName.empty())
+		{
+			path += "/" + appName;
+		}
+		return path;
+	}
 }

@@ -18,6 +18,7 @@ namespace AuxEngine
 		~FileUtils() = delete;
 
 	public:
+		static bool DoesFileExist(const std::string& filePath);
 		static bool CreateFileAtPath(const std::string& filePath);
 		static bool CreateDirectories(const std::string& dirPath);
 		static bool DeleteFileAtPath(const std::string& filePath);
@@ -35,6 +36,7 @@ namespace AuxEngine
 		static bool CreateCsvFile(const std::string& filePath, const std::vector<std::string>& headers);
 
 		static std::string GetExecutableDirectory();
+		static std::string GetLocalAppDataDirectory(const std::string& appName);
 	};
 }
 

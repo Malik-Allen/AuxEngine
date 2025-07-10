@@ -8,6 +8,7 @@
 namespace AuxEngine
 {
     class EngineClock;
+    class EngineConfig;
     class WindowHandler;
     class InputHandler;
     class App;
@@ -19,26 +20,28 @@ namespace AuxEngine
         Engine();
 
     public:
-        Engine( const Engine& ) = delete;
-        Engine& operator=( const Engine& ) = delete;
-        Engine( Engine&& ) = delete;
-        Engine& operator = ( Engine&& ) = delete;
-
+        Engine(Engine&&) = delete;
+        Engine(const Engine&) = delete;
+        Engine& operator=(const Engine&) = delete;
+        Engine& operator = (Engine&&) = delete;
         ~Engine() override;
 
     private:
+        bool canTick_;
         bool isRunning_;
+        std::unique_ptr<EngineConfig> config_;
         std::unique_ptr<EngineClock> clock_;
         std::unique_ptr<WindowHandler> windowHandler_;
         InputHandler& inputHandler_;
         std::unique_ptr<App> app_;
 
-        void Update( const float deltaTime );
+        void Update(const float deltaTime);
 
     public:
-        void Start();
-        bool LoadApp( App* app );
+        void Start(const char* outputDir = "");
+        bool LoadApp(App* app);
         void Run();
+        bool CanTick() const { return canTick_; }
         bool IsRunning() const { return isRunning_; }
         void Shutdown();
 
