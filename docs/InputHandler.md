@@ -1,4 +1,4 @@
-# InputHandler – Cross-Device Input Abstraction System
+# InputHandler
 
 ## Overview
 
