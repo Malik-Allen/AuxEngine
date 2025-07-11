@@ -59,6 +59,30 @@ namespace AuxEngine
 		return true;
 	}
 
+	bool FileUtils::CreateUniqueDirectory(const std::string& basePath, const std::string& dirName, std::string& outDir)
+	{
+		std::filesystem::path targetPath = basePath + "/" + dirName;
+
+		int counter = 1;
+		while (std::filesystem::exists(targetPath)) 
+		{
+			std::ostringstream oss;
+			oss << dirName << " (" << counter << ")";
+			targetPath = basePath + "/" + oss.str();
+			++counter;
+		}
+
+		if (std::filesystem::create_directory(targetPath)) 
+		{
+			outDir = targetPath.string();
+			return true;
+		}
+		{
+			DEBUG_LOG(LOG::ERRORLOG, "Failed to create unique directory {} / {}", basePath, dirName);
+			return false;
+		}
+	}
+
 	bool FileUtils::DeleteFileAtPath(const std::string& filePath)
 	{
 		std::error_code err;
@@ -200,6 +224,16 @@ namespace AuxEngine
 		oss << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
 		outTimeStamp = oss.str();
 		return true;
+	}
+
+	std::string FileUtils::GetDate()
+	{
+		const auto now = std::chrono::system_clock::now();
+		const auto timePoint = std::chrono::clock_cast<std::chrono::system_clock>(now);
+		const std::time_t time = std::chrono::system_clock::to_time_t(timePoint);
+		std::ostringstream oss;
+		oss << std::put_time(std::localtime(&time), "%Y-%m-%d");
+		return oss.str();
 	}
 
 	std::string FileUtils::to_lowercase(const std::string& in)
