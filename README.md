@@ -8,7 +8,7 @@
 
 # Engine
 
-AuxEngine is a lightweight and modular development engine created to support my explorations in software development. A sort of mini-engine, with systems that I commonly use across projects.
+*AuxEngine* is a lightweight and modular development engine created to support my explorations in software development. A sort of mini-engine, with systems that I commonly use across projects.
 
 ## Key Features
 
