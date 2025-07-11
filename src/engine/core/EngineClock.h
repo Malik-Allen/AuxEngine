@@ -1,79 +1,60 @@
-﻿// MIT License, Copyright (c) 2019 Malik Allen
+﻿// MIT License, Copyright (c) 2025 Malik Allen
 
 #ifndef AUX_ENGINECLOCK_H
 #define AUX_ENGINECLOCK_H
 
-#include "HighResTimer.h"
+#ifndef MILLISECONDS_TO_SECONDS
+#define MILLISECONDS_TO_SECONDS (1 / 1000.0f)
+#endif
 
-namespace  AuxEngine
+#ifndef SECONDS_TO_MILLISECONDS
+#define SECONDS_TO_MILLISECONDS (1000 / 1)
+#endif
+
+#ifndef MICROSECONDS_TO_SECONDS
+#define MICROSECONDS_TO_SECONDS (1 / 1000000.0f)
+#endif
+
+#ifndef SECONDS_TO_MICROSECONDS
+#define SECONDS_TO_MICROSECONDS (1000000 / 1)
+#endif
+
+#ifndef MILLISECONDS_TO_MICROSECONDS
+#define MILLISECONDS_TO_MICROSECONDS (1000 / 1)
+#endif
+
+#ifndef MICROSECONDS_TO_MILLISECONDS
+#define MICROSECONDS_TO_MILLISECONDS (1 / 1000.0f)
+#endif
+
+namespace AuxEngine
 {
-    class EngineClock : public HighResTimer
+    class EngineClock
     {
     public:
-        EngineClock( const EngineClock& ) = delete;
-        EngineClock& operator=( const EngineClock& ) = delete;
-        EngineClock( EngineClock&& ) = delete;
-        EngineClock& operator=( EngineClock&& ) = delete;
+        EngineClock();
+        EngineClock(const EngineClock&) = delete;
+        EngineClock(EngineClock&&) = delete;
+        EngineClock& operator=(const EngineClock&) = delete;
+        EngineClock& operator=(EngineClock&&) = delete;
+        ~EngineClock() = default;
 
-        EngineClock() :
-            HighResTimer(),
-            prevTicks_( 0 ),
-            currentTicks_( 0 ),
-            fps_( 120 )
-        {
-            Reset();
-        }
+        unsigned int GetFPS() const;
+        void SetFPS(unsigned int fps);
 
-        ~EngineClock() override = default;
-
-        unsigned int GetFPS() const { return fps_; }
-        void SetFPS( unsigned int fps ) { fps_ = fps; }
-
-        void Reset()
-        {
-            prevTicks_ = currentTicks_ = HighResTimer::GetCurrentTimeInMilliSeconds();
-        }
-
-        void UpdateFrameTicks()
-        {
-            prevTicks_ = currentTicks_;
-            currentTicks_ = HighResTimer::GetCurrentTimeInMilliSeconds();
-        }
-
-        float GetDeltaTime() const
-        {
-            return static_cast< float >( currentTicks_ - prevTicks_ ) * MILLISECONDS_TO_SECONDS;	// Conversion to seconds
-        }
-
-        unsigned int GetSleepTime( const unsigned int fps )
-        {
-            const unsigned int milliSecsPerFrame = SECONDS_TO_MILLISECONDS / fps;
-
-            if( milliSecsPerFrame == 0 )
-            {
-                return 0;
-            }
-
-            const unsigned int sleepTime = milliSecsPerFrame - HighResTimer::GetCurrentTimeInMilliSeconds();
-
-            if( sleepTime > milliSecsPerFrame )
-            {
-                return milliSecsPerFrame;
-            }
-
-            return sleepTime;
-        }
-
-        // Current time in milliseconds
-        int GetCurrentTicks() const
-        {
-            return  currentTicks_;
-        }
+        void Reset();
+        void UpdateFrameTicks();
+        float GetDeltaTime() const;
+        unsigned int GetSleepTime(const unsigned int fps);
+        int GetCurrentTicks() const; // Current time in milliseconds
 
     private:
         unsigned int prevTicks_;
         unsigned int currentTicks_;
         unsigned int fps_;
+
+        unsigned int GetCurrentTimeInMicroSeconds();
+        unsigned int GetCurrentTimeInMilliSeconds();
     };
 }
 

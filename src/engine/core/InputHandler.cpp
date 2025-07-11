@@ -2,8 +2,6 @@
 
 
 #include "InputHandler.h"
-#include "HighResTimer.h"
-
 
 namespace  AuxEngine
 {
