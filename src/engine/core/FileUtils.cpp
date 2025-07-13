@@ -105,6 +105,22 @@ namespace AuxEngine
 		return result;
 	}
 
+	std::vector<std::string> FileUtils::GetDirectoryFiles(const std::string& dirPath)
+	{
+		std::vector<std::string> files;
+		if (std::filesystem::exists(dirPath) && std::filesystem::is_directory(dirPath))
+		{
+			for (const auto& entry : std::filesystem::directory_iterator(dirPath))
+			{
+				if (!entry.is_directory())
+				{
+					files.push_back(entry.path().filename().string());
+				}
+			}
+		}
+		return files;
+	}
+
 	std::vector<std::string> FileUtils::GetSubdirectories(const std::string& dirPath)
 	{
 		std::vector<std::string> subDirs;

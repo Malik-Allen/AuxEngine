@@ -24,6 +24,7 @@ namespace AuxEngine
 		static bool CreateUniqueDirectory(const std::string& basePath, const std::string& dirName, std::string& outDir);
 		static bool DeleteFileAtPath(const std::string& filePath);
 		static bool DeleteDirectory(const std::string& dirPath);
+		static std::vector<std::string> GetDirectoryFiles(const std::string& dirPath);
 		static std::vector<std::string> GetSubdirectories(const std::string& dirPath);
 		static bool DuplicateFile(const std::string& sourceFilePath, const std::string& destFilePath);
 		static bool CopyDirectory(const std::string& sourceDirPath, const std::string& destDirPath);
