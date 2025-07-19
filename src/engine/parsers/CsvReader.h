@@ -18,8 +18,8 @@ namespace AuxEngine
         using Iterator = csv::CSVReader::iterator;
 
         CsvReader(const CsvReader&) = delete;
-        CsvReader& operator=(const CsvReader&) = delete;
         CsvReader(CsvReader&&) = delete;
+        CsvReader& operator=(const CsvReader&) = delete;
         CsvReader& operator=(CsvReader&&) = delete;
 
         explicit CsvReader(const std::string& filePath)
@@ -29,6 +29,8 @@ namespace AuxEngine
         CsvReader(const std::string& filePath, const CsvFormat& format)
             : reader_(filePath, format)
         {}
+
+        ~CsvReader() = default;
 
         Iterator begin() { return reader_.begin(); }
         Iterator end() { return reader_.end(); }
