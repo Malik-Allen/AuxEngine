@@ -100,6 +100,10 @@ namespace AuxEngine
 			/*[05/15/22|21:33:51][INFO]:	FunctionName(00):	Message {}*/
 			std::string output;
 			output.append(BuildTimeStamp());
+			output.append("[");
+			output.append(ToString(logType));
+			output.append("]");
+			output.append(BuildFunctionSignature(fileName, line));
 			output.append(": ");
 			output.append(message);
 			output.append("\n");
@@ -122,6 +126,10 @@ namespace AuxEngine
 			/*[05/15/22|21:33:51][INFO]:	FunctionName(00):	Message {}*/
 			std::string output;
 			output.append(BuildTimeStamp());
+			output.append("[");
+			output.append(ToString(logType));
+			output.append("]");
+			output.append(BuildFunctionSignature(fileName, line));
 			output.append(": ");
 			output.append(message);
 			output.append("\n");
