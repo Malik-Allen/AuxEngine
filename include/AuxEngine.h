@@ -13,9 +13,13 @@
 #include "../src/engine/core/FileUtils.h"
 #include "../src/engine/core/Hash.h"
 #include "../src/engine/core/InputHandler.h"
+
 #include "../src/engine/parsers/CsvReader.h"
 #include "../src/engine/parsers/CsvWriter.h"
 #include "../src/engine/parsers/IniParser.h"
 #include "../src/engine/parsers/JsonParser.h"
+
+#include "../src/engine/misc/Date.h"
+#include "../src/engine/misc/Money.h"
 
 #endif // AUX_ENGINE_H

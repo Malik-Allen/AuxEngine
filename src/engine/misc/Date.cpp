@@ -1,6 +1,6 @@
 // MIT License, Copyright (c) 2025 Malik Allen
 
-#include "engine/core/Date.h"
+#include "engine/misc/Date.h"
 #include "engine/core/DebugLog.h"
 
 #include <chrono>
@@ -58,6 +58,8 @@ namespace AuxEngine
 			day_ = other.day_;
 			month_ = other.month_;
 			year_ = other.year_;
+
+			other.day_ = other.month_ = other.year_ = 0;
 		}
 		return *this;
 	}
@@ -146,12 +148,12 @@ namespace AuxEngine
 		return year_;
 	}
 
-	std::string Date::to_string_year_month() const
+	std::string Date::toStringYearMonth() const
 	{
 		return std::to_string(year_) + "-" + std::to_string(month_);
 	}
 
-	int Date::days_to(const Date& date) const
+	int Date::daysTo(const Date& date) const
 	{
 		std::chrono::sys_days startDate = std::chrono::year_month_day{ std::chrono::year{year()}, std::chrono::month{static_cast<unsigned int>(month())}, std::chrono::day{static_cast<unsigned int>(day())} };
 		std::chrono::sys_days endDate = std::chrono::year_month_day{ std::chrono::year{date.year()}, std::chrono::month{static_cast<unsigned int>(date.month())}, std::chrono::day{static_cast<unsigned int>(date.day())} };

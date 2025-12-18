@@ -1,7 +1,7 @@
 // MIT License, Copyright (c) 2025 Malik Allen
 
-#ifndef AUX_DATE
-#define AUX_DATE
+#ifndef AUX_DATE_H
+#define AUX_DATE_H
 
 #include <string>
 
@@ -26,9 +26,9 @@ namespace AuxEngine
 		int year() const;
 
 		// Formated YYYY-M
-		std::string to_string_year_month() const;
+		std::string toStringYearMonth() const;
 
-		int days_to(const Date& endDate) const;
+		int daysTo(const Date& endDate) const;
 
 		static Date CurrentDate();
 
