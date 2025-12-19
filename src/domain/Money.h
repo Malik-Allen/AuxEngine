@@ -10,15 +10,22 @@ namespace AuxEngine
 	struct Currency
 	{
 		std::string code_;
+		int numericCode_ = 0;
 		std::string name_;
 		std::string symbol_;
 
 		bool operator==(const Currency& other) const;
 	};
 
-	struct Money
+	class Money
 	{
-		explicit Money(const int64_t cents);
+		// unscaled value of money (cents)
+		int64_t value_;
+		// currency codes for this monetery value
+		Currency currency_;
+
+	public:
+		explicit Money(const int64_t cents, const Currency& currency);
 		Money(const Money& other);
 		Money(Money&& other) noexcept;
 		Money& operator=(const Money& other);
@@ -44,13 +51,10 @@ namespace AuxEngine
 		inline bool isNegative() const { return value_ < 0; }
 
 		double toDouble() const;
+		const Currency& currency() const;
 
 		std::string toString() const;
 		std::string toCommaSeparatedString() const;
-
-	private:
-		// unscaled value of money (cents)
-		int64_t value_;
 	};
 }
 

@@ -12,28 +12,34 @@ namespace AuxEngine
 
 	bool Currency::operator==(const Currency& other) const
 	{
-		return code_ == other.code_;
+		return numericCode_ == other.numericCode_;
 	}
 
-	Money::Money(const int64_t cents)
+	Money::Money(const int64_t cents, const Currency& currency)
 		: value_(cents)
+		, currency_(currency)
 	{
 	}
 
 	Money::Money(const Money& other)
 		: value_(other.value_)
+		, currency_(other.currency_)
 	{
 	}
 
 	Money::Money(Money&& other) noexcept
 	{
 		value_ = other.value_;
+		currency_ = other.currency_;
+
 		other.value_ = 0;
+		other.currency_ = Currency();
 	}
 
 	Money& Money::operator=(const Money& other)
 	{
 		value_ = other.value_;
+		currency_ = other.currency_;
 		return *this;
 	}
 
@@ -42,14 +48,17 @@ namespace AuxEngine
 		if (this != &other)
 		{
 			value_ = other.value_;
+			currency_ = other.currency_;
+
 			other.value_ = 0;
+			other.currency_ = Currency();
 		}
 		return *this;
 	}
 
 	bool Money::operator==(const Money& other) const
 	{
-		return value_ == other.value_;
+		return value_ == other.value_ && currency_ == other.currency_;
 	}
 
 	bool Money::operator>(const Money& other) const
@@ -74,12 +83,12 @@ namespace AuxEngine
 
 	Money Money::operator-() const
 	{
-		return Money(-value_);
+		return Money(-value_, currency_);
 	}
 
 	Money Money::operator+(const Money& other) const
 	{
-		return Money(value_ + other.value_);
+		return Money(value_ + other.value_, currency_);
 	}
 
 	Money Money::operator+=(const Money& other)
@@ -90,7 +99,7 @@ namespace AuxEngine
 
 	Money Money::operator-(const Money& other) const
 	{
-		return Money(value_ - other.value_);
+		return Money(value_ - other.value_, currency_);
 	}
 
 	Money Money::operator-=(const Money& other)
@@ -101,7 +110,7 @@ namespace AuxEngine
 
 	Money Money::operator*(const int64_t scalar) const
 	{
-		return Money(value_ * scalar);
+		return Money(value_ * scalar, currency_);
 	}
 
 	Money operator*(const int64_t scalar, const Money& m)
@@ -121,7 +130,7 @@ namespace AuxEngine
 		{
 			throw std::runtime_error("Cannot divide by zero!");
 		}
-		return Money(value_ / scalar);
+		return Money(value_ / scalar, currency_);
 	}
 
 	Money Money::operator/=(const int64_t scalar)
@@ -137,6 +146,11 @@ namespace AuxEngine
 	double Money::toDouble() const
 	{
 		return static_cast<double>(value_) / static_cast<double>(SCALE);
+	}
+
+	const Currency& Money::currency() const
+	{
+		return currency_;
 	}
 
 	std::string Money::toString() const
