@@ -8,6 +8,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <regex>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -25,6 +26,14 @@ namespace AuxEngine
 	static const std::string IniExt(".ini");
 	static const std::string CsvExt(".csv");
 	static const std::string TxtExt(".txt");
+
+	// Regex allows letters, numbers, space, hyphen, and hash only
+	// Disallowed characters include: \ / : * ? " < > | (Windows), and / (Unix)
+	static const std::regex ValidPattern(R"(^[A-Za-z0-9 \-#]+$)");
+
+	// Disallow Windows reserved names(CON, NUL, PRN, etc.)
+	static const std::regex ReservedPattern(R"(^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$)", std::regex_constants::icase);
+
 
 	bool FileUtils::DoesFileExist(const std::string& filePath)
 	{
@@ -280,6 +289,32 @@ namespace AuxEngine
 		}
 
 		return ext == targetExt;
+	}
+
+	bool FileUtils::is_valid_name(const std::string& name, std::string& outErr)
+	{
+		outErr = "";
+
+		// Check for empty or all-spaces
+		if (name.empty() || std::all_of(name.begin(), name.end(), [](char ch) { return std::isspace(static_cast<unsigned char>(ch)); })) {
+			outErr = "Name cannot be empty or consist only of whitespace.";
+			return false;
+		}
+
+		if (!std::regex_match(name, ValidPattern))
+		{
+			outErr = "Invalid characters in name. Allowed: A-Z, a-z, 0-9, space, '-', and '#'. "
+				"Disallowed characters include: \\ / : * ? \" < > |";
+			return false;
+		}
+
+		if (std::regex_match(name, ReservedPattern))
+		{
+			outErr = "The name is reserved and cannot be used (e.g., CON, PRN, AUX, NUL, COM1, LPT1, etc.)";
+			return false;
+		}
+
+		return true;
 	}
 
 	bool FileUtils::CreateIniFile(const std::string& filePath, const std::vector<std::string>& sections)
