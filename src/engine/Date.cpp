@@ -1,7 +1,7 @@
 // MIT License, Copyright (c) 2025 Malik Allen
 
-#include "engine/misc/Date.h"
-#include "engine/core/DebugLog.h"
+#include "engine/Date.h"
+#include "engine/DebugLog.h"
 
 #include <chrono>
 

@@ -2,7 +2,7 @@
 
 #include "FileUtils.h"
 
-#include "engine/core/DebugLog.h"
+#include "engine/DebugLog.h"
 #include "engine/parsers/CsvWriter.h"
 #include "engine/parsers/IniParser.h"
 

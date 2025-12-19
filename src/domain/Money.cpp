@@ -1,6 +1,6 @@
 // MIT License, Copyright (c) 2025 Malik Allen
 
-#include "engine/misc/Money.h"
+#include "domain/Money.h"
 
 #include <format>
 #include <stdexcept>

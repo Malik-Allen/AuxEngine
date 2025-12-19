@@ -3,9 +3,9 @@
 #include "engine/devices/glfw/GLFWInputHandler.h"
 #include "engine/devices/glfw/GLFWWindowHandler.h"
 
-#include "engine/core/DebugLog.h"
-#include "engine/core/Engine.h"
-#include "engine/core/EngineClock.h"
+#include "engine/DebugLog.h"
+#include "engine/Engine.h"
+#include "engine/EngineClock.h"
 
 #include <GLFW/glfw3.h>
 

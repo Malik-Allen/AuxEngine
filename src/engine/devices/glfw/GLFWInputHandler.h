@@ -3,8 +3,8 @@
 #ifndef AUX_GLFW_INPUTHANDLER_H
 #define AUX_GLFW_INPUTHANDLER_H
 
-#include "engine/core/InputHandler.h"
-#include "engine/core/Singleton.h"
+#include "engine/InputHandler.h"
+#include "engine/Singleton.h"
 
 class GLFWwindow;
 

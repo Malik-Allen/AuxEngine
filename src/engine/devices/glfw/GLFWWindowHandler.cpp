@@ -1,7 +1,7 @@
 ﻿// MIT License, Copyright (c) 2024 Malik Allen
 
 #include "engine/devices/glfw/GLFWWindowHandler.h"
-#include "engine/core/DebugLog.h"
+#include "engine/DebugLog.h"
 
 #include <GLFW/glfw3.h>
 

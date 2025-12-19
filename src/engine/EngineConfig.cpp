@@ -1,9 +1,9 @@
 // MIT License, Copyright (c) 2025 Malik Allen
 
-#include "engine/core/EngineConfig.h"
+#include "engine/EngineConfig.h"
 
-#include "engine/core/DebugLog.h"
-#include "engine/core/FileUtils.h"
+#include "engine/DebugLog.h"
+#include "engine/FileUtils.h"
 #include "engine/parsers/IniParser.h"
 
 namespace  AuxEngine

@@ -3,7 +3,7 @@
 #ifndef AUX_GLFW_WINDOWHANDLER_H
 #define AUX_GLFW_WINDOWHANDLER_H
 
-#include "engine/core/WindowHandler.h"
+#include "engine/WindowHandler.h"
 
 class GLFWwindow;
 

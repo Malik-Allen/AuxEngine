@@ -1,11 +1,11 @@
 ﻿// MIT License, Copyright (c) 2019 Malik Allen
 
-#include "engine/core/Engine.h"
+#include "engine/Engine.h"
 
-#include "engine/core/App.h"
-#include "engine/core/DebugLog.h"
-#include "engine/core/EngineClock.h"
-#include "engine/core/EngineConfig.h"
+#include "engine/App.h"
+#include "engine/DebugLog.h"
+#include "engine/EngineClock.h"
+#include "engine/EngineConfig.h"
 #include "engine/devices/GLFW/GLFWInputHandler.h"
 #include "engine/devices/GLFW/GLFWWindowHandler.h"
 
