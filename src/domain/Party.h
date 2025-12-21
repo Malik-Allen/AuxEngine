@@ -17,9 +17,9 @@ namespace AuxEngine
     {
         std::string street_;
         std::string city_;
-        std::string region_;
-        std::string country_;
         std::string postalCode_;
+        std::string state_;
+        std::string country_;
     };
 
     struct ContactDetails 
