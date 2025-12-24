@@ -34,6 +34,7 @@ namespace AuxEngine
 	// Disallow Windows reserved names(CON, NUL, PRN, etc.)
 	static const std::regex ReservedPattern(R"(^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$)", std::regex_constants::icase);
 
+	static const std::regex ValidEmailPattern(R"(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)");
 
 	bool FileUtils::DoesFileExist(const std::string& filePath)
 	{
@@ -291,7 +292,7 @@ namespace AuxEngine
 		return ext == targetExt;
 	}
 
-	bool FileUtils::is_valid_name(const std::string& name, std::string& outErr)
+	bool FileUtils::is_valid_file_name(const std::string& name, std::string& outErr)
 	{
 		outErr = "";
 
@@ -314,6 +315,17 @@ namespace AuxEngine
 			return false;
 		}
 
+		return true;
+	}
+
+	bool FileUtils::is_valid_email(const std::string& name, std::string& outErr)
+	{
+		outErr = "";
+		if (name.empty() || std::all_of(name.begin(), name.end(), [](char ch) { return std::isspace(static_cast<unsigned char>(ch)); }) || !std::regex_match(name, ValidEmailPattern))
+		{
+			outErr = "Please enter a valid email address (for example: name@example.com)";
+			return false;
+		}
 		return true;
 	}
 

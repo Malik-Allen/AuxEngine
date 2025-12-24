@@ -34,7 +34,8 @@ namespace AuxEngine
 		static std::string to_lowercase(const std::string& in);
 		static std::string to_uppercase(const std::string& in);
 		static bool has_extension(const std::string& filePath, const std::string& _ext);
-		static bool is_valid_name(const std::string& name, std::string& outErr);
+		static bool is_valid_file_name(const std::string& name, std::string& outErr);
+		static bool is_valid_email(const std::string& name, std::string& outErr);
 
 		static bool CreateIniFile(const std::string& filePath, const std::vector<std::string>& sections);
 		static bool CreateCsvFile(const std::string& filePath, const std::vector<std::string>& headers);
