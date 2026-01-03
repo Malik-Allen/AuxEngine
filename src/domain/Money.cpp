@@ -153,14 +153,14 @@ namespace AuxEngine
 		return currency_;
 	}
 
-	std::string Money::toString() const
+	std::string Money::toString(bool bWithSymbol) const
 	{
-		return std::format("{:.{}f}", toDouble(), DECIMAL_PLACES);
+		return std::format("{}{:.{}f}", bWithSymbol ? currency_.symbol_ : "", toDouble(), DECIMAL_PLACES);
 	}
 
-	std::string Money::toCommaSeparatedString() const
+	std::string Money::toCommaSeparatedString(bool bWithSymbol) const
 	{
-		std::string dollarString = toString();
+		std::string dollarString = toString(false);
 		
 		std::string centString;
 		// Remove and cache the last three characters (cents and decimal)
@@ -197,6 +197,13 @@ namespace AuxEngine
 			output.push_back(centString[i]);
 		}
 
-		return output;
+		if (bWithSymbol)
+		{
+			return std::format("{}{}", currency_.symbol_, output);
+		}
+		else
+		{
+			return output;
+		}
 	}
 }

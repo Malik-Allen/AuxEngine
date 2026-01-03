@@ -12,7 +12,7 @@ namespace AuxEngine
 		std::string code_;
 		int numericCode_ = 0;
 		std::string name_;
-		std::string symbol_;
+		std::string symbol_ = "$";
 
 		bool operator==(const Currency& other) const;
 	};
@@ -53,8 +53,8 @@ namespace AuxEngine
 		double toDouble() const;
 		const Currency& currency() const;
 
-		std::string toString() const;
-		std::string toCommaSeparatedString() const;
+		std::string toString(bool bWithSymbol) const;
+		std::string toCommaSeparatedString(bool bWithSymbol) const;
 	};
 }
 
