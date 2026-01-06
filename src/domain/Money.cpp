@@ -161,6 +161,11 @@ namespace AuxEngine
 	std::string Money::toCommaSeparatedString(bool bWithSymbol) const
 	{
 		std::string dollarString = toString(false);
+		// Remove dash will add back later
+		if (isNegative())
+		{
+			dollarString.erase(dollarString.begin());
+		}
 		
 		std::string centString;
 		// Remove and cache the last three characters (cents and decimal)
@@ -177,7 +182,7 @@ namespace AuxEngine
 		{
 			++count;
 			output.push_back(dollarString[i]);
-			if (count == 3) 
+			if (count == 3)
 			{
 				output.push_back(',');
 				count = 0;
@@ -189,6 +194,12 @@ namespace AuxEngine
 		if (output.size() % 4 == 0) 
 		{
 			output.erase(output.begin());
+		}
+
+		// Re-add the dash if negative
+		if (isNegative())
+		{
+			output.insert(output.begin(), '-');
 		}
 
 		// Re-add the cents and decimal characters
