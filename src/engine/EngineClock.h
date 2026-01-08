@@ -53,8 +53,9 @@ namespace AuxEngine
         unsigned int currentTicks_;
         unsigned int fps_;
 
-        unsigned int GetCurrentTimeInMicroSeconds();
-        unsigned int GetCurrentTimeInMilliSeconds();
+    public:
+        unsigned int GetCurrentTimeInMicroSeconds() const;
+        unsigned int GetCurrentTimeInMilliSeconds() const;
     };
 }
 

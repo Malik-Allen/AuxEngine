@@ -63,14 +63,14 @@ namespace AuxEngine
         return  currentTicks_;
     }
 
-    unsigned int EngineClock::GetCurrentTimeInMicroSeconds()
+    unsigned int EngineClock::GetCurrentTimeInMicroSeconds() const
     {
         const auto now = std::chrono::high_resolution_clock::now();
         const auto micros = std::chrono::time_point_cast<std::chrono::microseconds>(now).time_since_epoch();
         return static_cast<unsigned int>(micros.count());
     }
 
-    unsigned int EngineClock::GetCurrentTimeInMilliSeconds()
+    unsigned int EngineClock::GetCurrentTimeInMilliSeconds() const
     {
         const auto now = std::chrono::high_resolution_clock::now();
         const auto millis = std::chrono::time_point_cast<std::chrono::milliseconds>(now).time_since_epoch();
