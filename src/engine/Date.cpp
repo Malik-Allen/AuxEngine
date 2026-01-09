@@ -12,19 +12,9 @@ namespace AuxEngine
 
 	Date::Date(int day, int month, int year)
 	{
-		if (isValidDate(day, month, year))
-		{
-			day_ = day;
-			month_ = month;
-			year_ = year;
-		}
-		else
-		{
-			DEBUG_LOG(LOG::ERRORLOG, "Invalid date! d:{} m:{} y:{}", day, month, year);
-			day_ = 1;
-			month_ = 1;
-			year_ = 1;
-		}
+		day_ = day;
+		month_ = month;
+		year_ = year;
 	}
 
 	Date::Date(const Date& other)

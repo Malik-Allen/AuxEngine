@@ -5,6 +5,10 @@
 
 #include <string>
 
+#ifndef DOLLARS_TO_CENTS
+#define DOLLARS_TO_CENTS 100.0
+#endif
+
 namespace AuxEngine
 {
 	struct Currency
@@ -35,6 +39,8 @@ namespace AuxEngine
 		bool operator>=(const Money& other) const;
 		bool operator<(const Money& other) const;
 		bool operator<=(const Money& other) const;
+
+		Money& operator=(const int64_t cents);
 
 		Money operator-() const;
 		Money operator+(const Money& other) const;

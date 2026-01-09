@@ -81,6 +81,12 @@ namespace AuxEngine
 		return value_ <= other.value_;
 	}
 
+	Money& Money::operator=(const int64_t cents)
+	{
+		value_ = cents;
+		return *this;
+	}
+
 	Money Money::operator-() const
 	{
 		return Money(-value_, currency_);
