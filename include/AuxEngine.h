@@ -19,7 +19,4 @@
 #include "../src/engine/parsers/IniParser.h"
 #include "../src/engine/parsers/JsonParser.h"
 
-#include "../src/domain/Money.h"
-#include "../src/domain/Party.h"
-
 #endif // AUX_ENGINE_H
