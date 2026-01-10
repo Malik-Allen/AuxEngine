@@ -138,6 +138,25 @@ namespace AuxEngine
 		return year_;
 	}
 
+	std::string Date::to_string() const
+	{
+		char buffer[11];
+		std::snprintf(buffer, sizeof(buffer), "%04d-%02d-%02d", year_, month_, day_);
+		return std::string(buffer);
+	}
+
+	Date Date::from_string(const std::string& date_string)
+	{
+		int y = 0, m = 0, d = 0;
+		if (sscanf(date_string.c_str(), "%4d-%2d-%2d", &y, &m, &d) == 3)
+		{
+			return Date(d, m, y);
+		}
+		// If parsing fails, return a default invalid date
+		return Date(1, 1, 1);
+	}
+
+
 	std::string Date::toStringYearMonth() const
 	{
 		return std::to_string(year_) + "-" + std::to_string(month_);

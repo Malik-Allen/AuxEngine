@@ -25,6 +25,12 @@ namespace AuxEngine
 		int month() const;
 		int year() const;
 
+		// format YYYY-MM-DD
+		std::string to_string() const;
+
+		// format YYYY-MM-DD
+		static Date from_string(const std::string& date_string);
+
 		// Formated YYYY-M
 		std::string toStringYearMonth() const;
 
