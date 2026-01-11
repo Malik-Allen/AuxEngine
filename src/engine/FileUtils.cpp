@@ -147,6 +147,22 @@ namespace AuxEngine
 		return subDirs;
 	}
 
+	size_t FileUtils::get_subdirectories(const std::string& dirPath, std::vector<std::string>& out_directories)
+	{
+		out_directories.clear();
+		if (std::filesystem::exists(dirPath) && std::filesystem::is_directory(dirPath))
+		{
+			for (const auto& entry : std::filesystem::directory_iterator(dirPath))
+			{
+				if (entry.is_directory())
+				{
+					out_directories.push_back(entry.path().filename().string());
+				}
+			}
+		}
+		return out_directories.size();
+	}
+
 	bool FileUtils::DuplicateFile(const std::string& sourceFilePath, const std::string& destFilePath)
 	{
 		std::error_code err;

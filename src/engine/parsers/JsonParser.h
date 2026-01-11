@@ -8,10 +8,11 @@
 #include <fstream>
 #include <iostream>
 
-typedef nlohmann::json json;
 
-namespace  AuxEngine
+namespace AuxEngine
 {
+    typedef nlohmann::json json;
+
     class JsonParser
     {
     public:
